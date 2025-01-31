@@ -1,0 +1,106 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8ebe5;
+    height: 100vh; /* Full height of the viewport */
+    display: flex;
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+}
+
+/* Login Container */
+.login-container {
+    display: flex;
+    background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 90vw; /* Takes 90% of the viewport width */
+    height: 90vh; /* Takes 90% of the viewport height */
+    max-width: 1800px; /* Ensures it does not exceed this width */
+    box-shadow: 14px 14px 10px rgba(0, 0, 0, 0.3); 
+    
+}
+
+/* Illustration Section */
+.login-container .illustration {
+    flex: 3;
+    background-color: #ffe6c8;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-container .illustration img {
+    max-width: 80%;
+    height: auto; /* Maintains aspect ratio */
+}
+
+.login-container .illustration p {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 18px;
+    color: #7e2957;
+}
+
+/* Form Section */
+.login-container .form-section {
+    flex: 2;
+    padding: 40px;
+    display: flex;
+    flex-direction:column;
+    justify-content: center; 
+    align-items: center;
+    /* height: 100%; */
+    /* width: 100%; */
+}
+
+.login-container .form-section h2 {
+    float: top;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #333333;
+}
+#title {
+    margin-bottom: 20px; 
+    text-align: center;  
+    font-size: 24px;     
+    color: rgb(228, 173, 71);
+    font-size: 30px;
+    font-family:cursive;
+}
+.login-container .form-section input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 70%;
+    height: 60px;
+    font-size: 18px;
+}
+
+.login-container .form-section button {
+    background-color: #7e2957;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 70%;
+    height: 60px;
+    font-size: 20px;
+}
+
+.login-container .form-section button:hover {
+    background-color: #551e3f;
+}
+
+
