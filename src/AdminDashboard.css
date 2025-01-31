@@ -15,7 +15,7 @@ body, html {
   background-color: #f8ebe3;
   margin: 0;
   padding: 0;
-  width: 100%; /* Ensure container spans full width */
+  width: 100%;
 }
 
 /* Title Bar */
@@ -28,39 +28,57 @@ body, html {
   padding: 10px 20px;
   background: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Span full width */
-  box-sizing: border-box; /* Include padding in width */
-  z-index: 100; /* Ensure it stays below other content */
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 100;
+  justify-content: space-between;
 }
 
-.title-bar h1 {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
+/* Navigation Boxes (Visible on Large Screens) */
+.nav-links {
+  display: flex;
+  gap: 15px;
 }
 
-/* Menu Button */
+.nav-box {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.nav-box:hover {
+  background: #0056b3;
+}
+
+/* Menu Button (Visible on Small Screens) */
 .menu-button {
   background: none;
   border: none;
   cursor: pointer;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: none; /* Initially hidden */
 }
 
 /* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
-  left: 0;
+  right: -250px; /* Initially hidden */
   width: 250px;
   height: 100%;
   background: white;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  z-index: 1000; /* Ensure it stays above the title bar */
+  z-index: 1000;
+  transition: right 0.3s ease-in-out;
+}
+
+.sidebar.open {
+  right: 0;
 }
 
 .sidebar ul {
@@ -83,21 +101,16 @@ body, html {
 .main-content {
   flex: 1;
   padding: 20px;
-  display: flex;
-  justify-content: flex-start; /* Align content to the left */
-  align-items: flex-start; /* Align content to the top */
-  margin-left: 250px; /* Adjust for sidebar width */
-  margin-top: 70px; /* Add top margin to avoid title bar overlap */
-  overflow-y: auto; /* Add scroll if content overflows vertically */
+  margin-top: 70px;
+  overflow-y: auto;
 }
 
 /* Card Container */
 .card-container {
   display: flex;
-  flex-direction: row; /* Ensure cards are in a row */
-  gap: 20px; /* Space between cards */
-  flex-wrap: wrap; /* Allow wrapping to the next row if needed */
-  justify-content: flex-start; /* Align cards to the left */
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
 
 /* Card */
@@ -134,4 +147,17 @@ body, html {
   margin-bottom: 10px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .nav-links {
+    display: none;
+  }
+  .menu-button {
+    display: flex;
+  }
+  .title-bar h1 {
+    font-size: 20px;
+  }
 }
