@@ -1,7 +1,7 @@
 // login.js (React Version with Fullscreen Updates)
 
 import React, { useState } from 'react';
-import placeholderImage from './placeholder2.jpg'; // Add a placeholder image
+import placeholderImage from './res/placeholder2.jpg'; // Add a placeholder image
 import './AdminLogin.css'
 
 function AdminLogin() {

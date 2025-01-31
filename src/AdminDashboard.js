@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
+import closeIcon from "./res/close.png";
+import Fa_mgmt_img from "./res/Faculty_mgmt_image.jpg";
 import "./AdminDashboard.css";
 
 const services = [
-  { title: "Student Records", description: "Manage student data efficiently.", image: "https://via.placeholder.com/100" },
+  { title: "Faculty Management", description: "", image:Fa_mgmt_img },
   { title: "Attendance", description: "Track student attendance seamlessly.", image: "https://via.placeholder.com/100" },
   { title: "Grades & Exams", description: "Monitor and update student performance.", image: "https://via.placeholder.com/100" },
   { title: "Notifications", description: "Send important updates to students.", image: "https://via.placeholder.com/100" }
@@ -17,10 +19,10 @@ export default function AdminDashboard() {
     <div className="container">
       {/* Title Bar */}
       <div className="title-bar">
-        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="menu-button">
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="menu-button" style={{ cursor: "pointer" }}>
           <Menu size={28} />
         </button>
-        <h1>IST Student Records</h1>
+        <h1>IST Student Records Admin</h1>
       </div>
 
       {/* Sidebar */}
@@ -30,6 +32,15 @@ export default function AdminDashboard() {
         transition={{ duration: 0.3 }}
         className="sidebar"
       >
+        <img
+          src={closeIcon}
+          id="close"
+          alt="Close"
+          width="24px"
+          height="24px"
+          onClick={() => setSidebarOpen(false)}
+          style={{ cursor: "pointer" }}
+        />
         <ul>
           <li>Dashboard</li>
           <li>Settings</li>
