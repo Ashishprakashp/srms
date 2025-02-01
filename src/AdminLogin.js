@@ -1,22 +1,26 @@
 // login.js (React Version with Fullscreen Updates)
 
 import React, { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import placeholderImage from './res/placeholder2.jpg'; // Add a placeholder image
 import './AdminLogin.css'
+import AdminDashboard from './AdminDashboard';
+
 
 function AdminLogin() {
+  let navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = (event) => {
     event.preventDefault();
-
-    if (email && password) {
-      console.log(`Email: ${email}, Password: ${password}`);
-      // Add your login logic here
-    } else {
-      alert('Please fill in all fields');
-    }
+    navigate('/admin-dashboard');
+    // if (email && password) {
+    //   console.log(`Email: ${email}, Password: ${password}`);
+    //   // Add your login logic here
+    // } else {
+    //   alert('Please fill in all fields');
+    // }
   };
 
   return (
