@@ -1,0 +1,28 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column; /* Stack containers vertically */
+}
+
+#top-container, #bottom-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    width: 100vw; /* Full viewport width */
+    border: 1px solid #000; /* Add border for visualization */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    align-content: center;
+    justify-content: center;
+}
+
+#top-container {
+    background-color: aqua;
+    flex: 2; /* Takes 2 parts of the available space */
+}
+
+#bottom-container {
+    background-color: aquamarine;
+    flex: 1; /* Takes 1 part of the available space */
+}
