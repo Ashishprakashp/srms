@@ -1,28 +1,146 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Full-page styling */
 html, body {
     height: 100%;
     margin: 0;
     display: flex;
-    flex-direction: column; /* Stack containers vertically */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #fef3e7; /* Light background for contrast */
 }
 
+#top-container{
+    margin-top: 100px;
+}
+/* Top & Bottom Containers */
 #top-container, #bottom-container {
     display: flex;
-    flex-direction: row;
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    width: 100vw; /* Full viewport width */
-    border: 1px solid #000; /* Add border for visualization */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    align-content: center;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    width: 90vw; /* Make it responsive */
+    max-width: 850px;
+    height: auto;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    padding: 20px;
+    background: #fde8df;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 
-#top-container {
-    background-color: aqua;
-    flex: 2; /* Takes 2 parts of the available space */
+/* Page Title */
+.page-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
 }
 
-#bottom-container {
-    background-color: aquamarine;
-    flex: 1; /* Takes 1 part of the available space */
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+}
+
+/* Ensure first-line elements are centered */
+.first-line {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Input Fields, Select, and Buttons */
+.field,.dwd1,.dwd2, select, .btn, input[type="submit"], input[type="file"] {
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    min-width: 150px;
+}
+
+.dwd1,.dwd2{
+    visibility: hidden;
+}
+/* Center Faculty-list text */
+#faculty-list {
+    width: 100%;
+    text-align: center;
+}
+
+/* Button Styling */
+.btn, input[type="submit"] {
+    text-align: center;
+    font-size: 18px;
+    background-color: #7e2957;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn:hover, input[type="submit"]:hover {
+    background-color: #5a1f40;
+}
+
+/* Styling for the file upload container */
+.file-upload-container {
+    display: flex;
+    align-items: center;  /* Ensures vertical alignment */
+    gap: 10px;  /* Adds space between text and input */
+}
+
+/* Hide the default file input */
+.file-input {
+    display: none;
+}
+
+/* Custom label for file upload button */
+.file-upload-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 15px;
+    transition: 0.3s;
+}
+
+/* Icon styling */
+.upload-icon {
+    width: 70px; /* Adjust size as needed */
+    margin-right: 10px; /* Space between the icon and text */
+}
+
+
+
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    #top-container, #bottom-container {
+        width: 95vw;
+        padding: 15px;
+    }
+
+    .first-line {
+        flex-direction: column;
+    }
 }
