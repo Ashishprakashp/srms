@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Page1 from './Page1';
 import Page2 from './Page2';
+import Page3 from './Page3';
 import './StudentForm.css';
 import AdminTitleBar from './AdminTitleBar';
 
@@ -35,6 +36,12 @@ const StudentForm = () => {
         return <Page1 formData={formData} setFormData={setFormData} />;
       case 2:
         return <Page2 formData={formData} setFormData={setFormData} />;
+      case 3:
+        return <Page3 formData={formData} setFormData={setFormData}/>;
+      case 4:
+        return <Page3 formData={formData} setFormData={setFormData}/>;
+      case 5:
+        return <Page3 formData={formData} setFormData={setFormData}/>;
       default:
         return <div>Invalid Page!</div>;
     }
@@ -51,12 +58,12 @@ const StudentForm = () => {
               Back
             </button>
           )}
-          {currentPage < 2 && (
+          {currentPage < 5 && (
             <button className="nav-button next-button" onClick={nextPage}>
               Next
             </button>
           )}
-          {currentPage === 2 && (
+          {currentPage === 5 && (
             <button className="nav-button submit-button" onClick={handleSubmit}>
               Submit
             </button>
