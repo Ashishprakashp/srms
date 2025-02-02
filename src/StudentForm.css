@@ -1,0 +1,57 @@
+
+body{
+  overflow-y: scroll;
+}
+/* StudentForm.css */
+.student-form-container {
+    /* padding-top: 80px; Add padding to avoid overlap with the title bar */
+    width: 75vw;
+    margin-top: 100px;
+    margin-bottom: 150px;
+    padding: 20px;
+    background-color: #ebebeb;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y:auto;
+  }
+  
+  .form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .nav-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .prev-button {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .next-button {
+    margin-left: auto;
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .submit-button {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .nav-button:hover {
+    opacity: 0.9;
+  }
