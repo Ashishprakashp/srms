@@ -3,9 +3,17 @@ body{
     padding-top: 150px;
     
 }
+@keyframes fadeIn {
+  to {
+      opacity: 1;
+      transform: translateY(0px);
+  }
+}
 /* Page1.css */
 .page1-container {
-  
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeIn 2s forwards;
     max-width: 100vw;
     margin-top: 150px;
     /* margin-bottom:150px; */

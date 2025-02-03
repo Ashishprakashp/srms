@@ -144,3 +144,48 @@ form {
         flex-direction: column;
     }
 }
+
+.faculty-table {
+    width: 80%; /* Adjust width as needed */
+    margin: 20px auto; /* Centers the table */
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.faculty-table th,
+.faculty-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.faculty-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.faculty-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.faculty-table tbody tr:hover {
+    background-color: #ddd;
+}
+
+.faculty-table button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.faculty-table button:hover {
+    background-color: #c82333;
+}

@@ -9,7 +9,7 @@ function App() {
   return(
   <Router>
     <Routes>
-      <Route path='/' element={<StudentForm/>}/>
+      <Route path='/' element={<FacultyManagement/>}/>
       <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
       <Route path='/faculty-management' element={<FacultyManagement/>}/>
     </Routes>

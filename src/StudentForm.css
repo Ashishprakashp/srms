@@ -2,9 +2,17 @@
 body{
   overflow-y: scroll;
 }
+@keyframes fadeIn {
+  to {
+      opacity: 1;
+      transform: translateY(0px);
+  }
+}
 /* StudentForm.css */
 .student-form-container {
-    
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeIn 2s forwards;
     width: 75vw;
     height: auto;
     margin-top: 300px;
@@ -44,17 +52,35 @@ body{
     color: white;
   }
   
+  .prev-button:active{
+    background-color: #5b6369;
+    transform: translateY(3px);
+  }
+
   .next-button {
     margin-left: auto;
     background-color: #007bff;
     color: white;
+  }
+  .next-button:active{
+    background-color: #0068d8;
+    transform: translateY(3px);
+    
   }
   
   .submit-button {
     background-color: #28a745;
     color: white;
   }
+
+  .submit-button:hover{
+    opacity: 0.9;
+  }
   
+  .submit-button:active{
+    background-color: #24963f;
+    transform: translateY(3px);
+  }
   .nav-button:hover {
     opacity: 0.9;
   }

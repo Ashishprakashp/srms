@@ -5,13 +5,13 @@ import { motion } from "framer-motion";
 import closeIcon from "./res/close.png";
 import Uni_logo from "./res/AnnaUniLogo.png";
 
-export default function AdminTitleBar(){
+export default function AdminTitleBar({title}){
     const [sidebarOpen, setSidebarOpen] = useState(false);
     return(
         <div>
         <div className="title-bar">
         <img src={Uni_logo} width="50px" height="50px" alt="University Logo" />
-        <h1>IST Student Records Admin</h1>
+        <h1>{title}</h1>
 
         {/* Navigation Boxes (Visible on Large Screens) */}
         <div className="nav-links">

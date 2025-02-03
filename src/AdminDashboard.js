@@ -25,7 +25,7 @@ export default function AdminDashboard() {
   return (
     <div className="container">
       {/* Title Bar */}
-      <AdminTitleBar/>
+      <AdminTitleBar title={"IST Student Records Admin"}/>
 
       {/* Main Content */}
       <div className="main-content">

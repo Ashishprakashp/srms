@@ -87,7 +87,7 @@ const StudentForm = () => {
 
   return (
     <div>
-    <AdminTitleBar />
+    <AdminTitleBar title={"IST Student Records Management System"}/>
     <div className="student-form-container">
       
       
