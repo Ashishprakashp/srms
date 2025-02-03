@@ -1,7 +1,7 @@
 import React from 'react';
 import './Page1.css'
 
-const Page2 = ({ formData, setFormData }) => {
+const Page3 = ({ formData, setFormData }) => {
   return (
     <div className="page1-container">
       <h2>Page 3: School Education Details</h2>
@@ -182,4 +182,4 @@ const Page2 = ({ formData, setFormData }) => {
   );
 };
 
-export default Page2;
+export default Page3;

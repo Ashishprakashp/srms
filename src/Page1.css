@@ -35,7 +35,13 @@ body{
     gap: 20px;
     /* margin-right: auto; */
   }
-  .form-group label , .form-group2 label{
+  .form-group5 {
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 20px;
+  }
+  .form-group label , .form-group2 label, .form-group5 label{
     display: block;
     font-weight: bold;
     margin-bottom: 5px;
@@ -44,7 +50,9 @@ body{
   
   .form-group input,
   .form-group2 input,
-  .form-group2 select
+  .form-group2 select,
+  .form-group5 input,
+  .form-group5 select,
   .form-group select {
     width: 100%;
     padding: 8px;
@@ -75,6 +83,7 @@ body{
   
   .form-group input:focus,
   .form-group2 input:focus
+  .form-group5 input:focus
   .form-group select:focus {
     outline: none;
     border-color: #007bff;
@@ -93,3 +102,69 @@ body{
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
+
+  .nav-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .add-button {
+    
+    background-color: #007bff;
+    color: white;
+    
+  }
+
+  .btn-container{
+    display: grid;
+    place-items: center;
+  }
+
+  .experience-table {
+    width: 80%; /* Adjust width as needed */
+    margin: 20px auto; /* Centers the table */
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.experience-table th,
+.experience-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    font-size: 16px;
+}
+
+.experience-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.experience-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.experience-table tbody tr:hover {
+    background-color: #ddd;
+}
+
+.experience-table button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.experience-table button:hover {
+    background-color: #c82333;
+}
