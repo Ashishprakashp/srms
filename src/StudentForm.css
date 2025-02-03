@@ -4,18 +4,21 @@ body{
 }
 /* StudentForm.css */
 .student-form-container {
-    /* padding-top: 80px; Add padding to avoid overlap with the title bar */
+    
     width: 75vw;
-    margin-top: 100px;
+    height: auto;
+    margin-top: 300px;
     margin-bottom: 150px;
     padding: 20px;
     background-color: #ebebeb;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-y:auto;
+    /* overflow-y: scroll; */
   }
   
   .form-content {
+    /* height: auto; */
+    padding-top: 80px;
     display: flex;
     flex-direction: column;
     gap: 20px;

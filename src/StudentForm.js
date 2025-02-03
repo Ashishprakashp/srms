@@ -86,10 +86,14 @@ const StudentForm = () => {
   };
 
   return (
+    <div>
+    <AdminTitleBar />
     <div className="student-form-container">
-      <AdminTitleBar />
+      
+      
+      
       <div className="form-content">
-        {renderPage()}
+      {renderPage()}
         <div className="form-navigation">
           {currentPage > 1 && (
             <button className="nav-button prev-button" onClick={prevPage}>
@@ -108,6 +112,7 @@ const StudentForm = () => {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };

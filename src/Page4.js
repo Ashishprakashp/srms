@@ -59,22 +59,28 @@ const Page4 = ({ formData, setFormData }) => {
           value={formData.entranceRegister || ''}
           onChange={(e) => setFormData({ ...formData, entranceRegister: e.target.value })}
         />
-      </div>
-      <div className="form-group">
         <label>Score:</label>
         <input
           type="number"
           value={formData.entranceScore || ''}
           onChange={(e) => setFormData({ ...formData, entranceScore: e.target.value })}
         />
-      </div>
-      <div className="form-group">
         <label>Year:</label>
         <input
           type="number"
           value={formData.entranceYear || ''}
           onChange={(e) => setFormData({ ...formData, entranceYear: e.target.value })}
         />
+        <label>Scorecard: </label>
+        <input
+        type='file'
+        />
+      </div>
+      <div className="form-group">
+        
+      </div>
+      <div className="form-group">
+        
       </div>
 
       <h2>Previous Work Experience Details</h2>
@@ -96,6 +102,10 @@ const Page4 = ({ formData, setFormData }) => {
           type="number"
           value={newExperience.expYears}
           onChange={(e) => setNewExperience({ ...newExperience, expYears: e.target.value })}
+        />
+        <label>Certificate: </label>
+        <input
+        type='file'
         />
       </div>
       <div className="btn-container">

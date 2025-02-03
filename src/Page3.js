@@ -5,9 +5,11 @@ const Page3 = ({ formData, setFormData }) => {
   return (
     <div className="page1-container">
       <h2>Page 3: School Education Details</h2>
-
+      <fieldset>
+        <legend>UG</legend>
       <div className="form-group">
-      <label>UG degree:</label>
+        
+      <label>Degree:</label>
           <div className="radio-group">
             <label>
               <input
@@ -58,25 +60,33 @@ const Page3 = ({ formData, setFormData }) => {
           value={formData.ugCollege}
           onChange={(e) => setFormData({ ...formData, ugCollege: e.target.value })}
         />
-      </div>
-      <div className="form-group">
         <label>Year of Passing:</label>
         <input
         type="number"
         value={formData.ugYear}
         onChange={(e) => setFormData({ ...formData, ugYear: e.target.value })}
         />
+      </div>
+      <div className="form-group">
+        
         <label>Percentage:</label>
         <input
         type="number"
         value={formData.ugPercentage}
         onChange={(e) => setFormData({ ...formData, ugPercentage: e.target.value })}
         />
+        <label>Provisional Certificate:</label>
+        <input
+        type="file"
+        />
         
-
       </div>
+      </fieldset>
+      
+      <fieldset>
+      <legend>Class XII</legend>
       <div className="form-group">
-      <label>Class XII Board:</label>
+      <label>Board:</label>
           <div className="radio-group">
             <label>
               <input
@@ -108,27 +118,33 @@ const Page3 = ({ formData, setFormData }) => {
           value={formData.xiiSchool}
           onChange={(e) => setFormData({ ...formData, xiiSchool: e.target.value })}
         />
-      </div>
-
-      <div className="form-group">
         <label>Year of Passing:</label>
         <input
         type="number"
         value={formData.xiiYear}
         onChange={(e) => setFormData({ ...formData, xiiYear: e.target.value })}
         />
+      </div>
+
+      <div className="form-group">
+        
         <label>Percentage:</label>
         <input
         type="number"
         value={formData.xiiPercentage}
         onChange={(e) => setFormData({ ...formData, xiiPercentage: e.target.value })}
         />
-        
+        <label>Class XII Marksheet:</label>
+        <input
+        type="file"
+        />
 
       </div>
-
+      </fieldset>
+      <fieldset>
+        <legend>Class X</legend>
       <div className="form-group">
-      <label>Class X Board:</label>
+      <label>Board:</label>
           <div className="radio-group">
             <label>
               <input
@@ -160,24 +176,29 @@ const Page3 = ({ formData, setFormData }) => {
           value={formData.xSchool}
           onChange={(e) => setFormData({ ...formData, xSchool: e.target.value })}
         />
-      </div>
-
-      <div className="form-group">
         <label>Year of Passing:</label>
         <input
         type="number"
         value={formData.xYear}
         onChange={(e) => setFormData({ ...formData, xYear: e.target.value })}
         />
+      </div>
+
+      <div className="form-group">
+        
         <label>Percentage:</label>
         <input
         type="number"
         value={formData.xPercentage}
         onChange={(e) => setFormData({ ...formData, xPercentage: e.target.value })}
         />
-        
+        <label>Class X Marksheet:</label>
+        <input
+        type="file"
+        />
 
       </div>
+      </fieldset>
     </div>
   );
 };
