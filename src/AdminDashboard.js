@@ -1,25 +1,23 @@
 
 
-import Fa_mgmt_img from "./res/Faculty_mgmt_image.jpg";
+  import Fa_mgmt_img from "./res/Faculty_mgmt_image.jpg";
 
 import "./AdminDashboard.css";
 import { useNavigate } from "react-router-dom"; 
 import AdminTitleBar from "./AdminTitleBar";
 
-const services = [
-  { title: "Faculty Management", description: "", image: Fa_mgmt_img },
-  { title: "Attendance", description: "Track student attendance seamlessly.", image: "https://via.placeholder.com/100" },
-  { title: "Grades & Exams", description: "Monitor and update student performance.", image: "https://via.placeholder.com/100" },
-  { title: "Notifications", description: "Send important updates to students.", image: "https://via.placeholder.com/100" }
-];
 
-export default function AdminDashboard() {
+
+export default function AdminDashboard({services}) {
   let navigate = useNavigate();
   
 
   const handleServiceClick= (serviceTitle)=>{
     if(serviceTitle==="Faculty Management"){
-      navigate('/faculty-management');  
+      navigate('/select-activity');  
+    }
+    if(serviceTitle==="Create Credentials"){
+      navigate('/faculty-management');
     }
   }
   return (

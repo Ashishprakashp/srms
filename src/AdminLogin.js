@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 import placeholderImage from './res/placeholder2.jpg'; // Add a placeholder image
 import './AdminLogin.css'
 import AdminDashboard from './AdminDashboard';
+import AdminTitleBar from './AdminTitleBar';
 
 
 function AdminLogin() {
@@ -24,7 +25,9 @@ function AdminLogin() {
   };
 
   return (
+    
     <div className="login-container">
+      <AdminTitleBar title="IST Student Records Admin"/>
       <div className="illustration">
         <img src={placeholderImage} alt="Illustration" />
       </div>
