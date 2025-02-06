@@ -9,7 +9,7 @@ import * as XLSX from "xlsx";
 export default function FacultyManagement() {
     const [fileName, setFileName] = useState('');
     const [faculties, setFaculties] = useState([]);
-    const [faculty, setFaculty] = useState({ facultyId: "", title: "--Title--", name: "", designation: "--Designation--", pwd: "" });
+    const [faculty, setFaculty] = useState({ facultyId: "", title: "--Title--", name: "", designation: "--Designation--", pwd: "" ,reset:0});
 
     const getTimestamp = () => new Date().toISOString().replace(/[-T:]/g, "_").split(".")[0];
 
@@ -30,7 +30,7 @@ export default function FacultyManagement() {
         }
         const newFaculty = { ...faculty, pwd: nanoid(12) };
         setFaculties([...faculties, newFaculty]);
-        setFaculty({ facultyId: "", title: "--Title--", name: "", designation: "--Designation--", pwd: "" });
+        setFaculty({ facultyId: "", title: "--Title--", name: "", designation: "--Designation--", pwd: "" ,reset:0});
     };
 
     const removeFaculty = (index) => setFaculties(faculties.filter((_, i) => i !== index));
@@ -52,8 +52,9 @@ export default function FacultyManagement() {
             return false;
         }
         try {
-            await axios.post('http://localhost:5000/faculty', { faculties: facultyList });
-            alert("Faculty details saved successfully!");
+            const response = await axios.post('http://localhost:5000/faculty', { faculties: facultyList });
+            console.log(response);
+            alert(response.data.message);
             setFaculties([]);
             return true;
         } catch (error) {
@@ -76,7 +77,8 @@ export default function FacultyManagement() {
                 title: item["Title"] || "--Title--",
                 name: item["Name"] || "",
                 designation: item["Designation"] || "--Designation--",
-                pwd: nanoid(12)
+                pwd: nanoid(12),
+                reset:0
             }));
 
             setFaculties((prev) => [...prev, ...formattedData]);
@@ -93,7 +95,7 @@ export default function FacultyManagement() {
     const generateXLS = async(data) => {
         if (!data.length) return;
         if (await addToDatabase(data)) {
-            const ws = XLSX.utils.json_to_sheet(data.map(({ facultyId, name, pwd }) => ({ "Faculty ID": facultyId, Name: name, Password: pwd })));
+            const ws = XLSX.utils.json_to_sheet(data.map(({ facultyId, name, pwd }) => ({ "Faculty ID": facultyId, Name: name, Password: pwd ,reset:0})));
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "FacultyCredentials");
             XLSX.writeFile(wb, `FC_${getTimestamp()}.xls`);

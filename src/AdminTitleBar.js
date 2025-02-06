@@ -11,7 +11,7 @@ export default function AdminTitleBar({title}){
         <div>
         <div className="title-bar">
         <img src={Uni_logo} width="50px" height="50px" alt="University Logo" />
-        <h1>{title}</h1>
+        <h1 style={{color:"white"}}>{title}</h1>
 
         {/* Navigation Boxes (Visible on Large Screens) */}
         <div className="nav-links">

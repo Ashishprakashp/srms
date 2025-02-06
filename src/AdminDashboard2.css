@@ -47,7 +47,7 @@ body, html {
     
     .nav-box {
     height: 100%;
-    background: white;
+    /* background: white; */
     color: black;
     border: none;
     padding: 0px 15px;

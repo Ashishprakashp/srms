@@ -15,7 +15,7 @@ body{
     transform: translateY(30px);
     animation: fadeIn 2s forwards;
     max-width: 100vw;
-    margin-top: 150px;
+    /* margin-top: 150px; */
     /* margin-bottom:150px; */
     padding: 20px;
     background-color: #f9f9f9;
