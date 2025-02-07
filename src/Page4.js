@@ -1,26 +1,62 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './Page1.css';
 
 const Page4 = ({ formData, setFormData }) => {
-  const [workExperience, setWorkExperience] = useState(formData.workExperience || []);
   const [newExperience, setNewExperience] = useState({ employerName: '', role: '', expYears: '' });
 
   const handleAddExperience = () => {
     if (newExperience.employerName && newExperience.role && newExperience.expYears) {
-      const updatedExperience = [...workExperience, newExperience];
-      setWorkExperience(updatedExperience);
-      setFormData({ ...formData, workExperience: updatedExperience });
+      const updatedExperience = [
+        ...(formData.entranceAndWorkExperience.workExperience || []),
+        {
+          ...newExperience,
+          expYears: parseFloat(newExperience.expYears), // Ensure expYears is stored as a number
+        },
+      ];
+      setFormData({
+        ...formData,
+        entranceAndWorkExperience: {
+          ...formData.entranceAndWorkExperience,
+          workExperience: updatedExperience,
+        },
+      });
       setNewExperience({ employerName: '', role: '', expYears: '' });
     }
   };
 
   const handleRemoveExperience = (index) => {
     setFormData((prevFormData) => {
-      const updatedWorkExperience = prevFormData.workExperience.filter((_, i) => i !== index);
-      return { ...prevFormData, workExperience: updatedWorkExperience };
+      const updatedWorkExperience = prevFormData.entranceAndWorkExperience.workExperience.filter((_, i) => i !== index);
+      return {
+        ...prevFormData,
+        entranceAndWorkExperience: {
+          ...prevFormData.entranceAndWorkExperience,
+          workExperience: updatedWorkExperience,
+        },
+      };
     });
-    setWorkExperience((prevWorkExperience) => prevWorkExperience.filter((_, i) => i !== index));
+  };
+
+  const handleFormChange = (field, value) => {
+    if (field === 'entranceScore' || field === 'entranceYear') {
+      value = parseFloat(value);
+    }
+  
+    // Ensure you're updating entrance and entranceRegister inside entranceAndWorkExperience
+    if (field === 'entrance' || field === 'entranceRegister' || field === 'entranceScore' || field === 'entranceYear') {
+      setFormData((prevData) => ({
+        ...prevData,
+        entranceAndWorkExperience: {
+          ...prevData.entranceAndWorkExperience,
+          [field]: value,
+        },
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [field]: value,
+      }));
+    }
   };
   
 
@@ -35,8 +71,8 @@ const Page4 = ({ formData, setFormData }) => {
               type="radio"
               name="entrance"
               value="TANCET"
-              checked={formData.entrance === "TANCET"}
-              onChange={(e) => setFormData({ ...formData, entrance: e.target.value })}
+              checked={formData.entranceAndWorkExperience.entrance === "TANCET"}
+              onChange={(e) => handleFormChange('entrance', e.target.value)}
             />
             TANCET
           </label>
@@ -45,8 +81,8 @@ const Page4 = ({ formData, setFormData }) => {
               type="radio"
               name="entrance"
               value="GATE"
-              checked={formData.entrance === "GATE"}
-              onChange={(e) => setFormData({ ...formData, entrance: e.target.value })}
+              checked={formData.entranceAndWorkExperience.entrance === "GATE"}
+              onChange={(e) => handleFormChange('entrance', e.target.value)}
             />
             GATE
           </label>
@@ -56,31 +92,26 @@ const Page4 = ({ formData, setFormData }) => {
         <label>Register Number:</label>
         <input
           type="text"
-          value={formData.entranceRegister || ''}
-          onChange={(e) => setFormData({ ...formData, entranceRegister: e.target.value })}
+          value={formData.entranceAndWorkExperience.entranceRegister || ''}
+          onChange={(e) => handleFormChange('entranceRegister', e.target.value)}
         />
         <label>Score:</label>
         <input
           type="number"
-          value={formData.entranceScore || ''}
-          onChange={(e) => setFormData({ ...formData, entranceScore: e.target.value })}
+          value={formData.entranceAndWorkExperience.entranceScore || ''}
+          onChange={(e) => handleFormChange('entranceScore', e.target.value)}
         />
         <label>Year:</label>
         <input
           type="number"
-          value={formData.entranceYear || ''}
-          onChange={(e) => setFormData({ ...formData, entranceYear: e.target.value })}
+          value={formData.entranceAndWorkExperience.entranceYear || ''}
+          onChange={(e) => handleFormChange('entranceYear', e.target.value)}
         />
         <label>Scorecard: </label>
         <input
-        type='file'
+          type="file"
+          onChange={(e) => setFormData({ ...formData, entranceScorecard: e.target.files[0] })}
         />
-      </div>
-      <div className="form-group">
-        
-      </div>
-      <div className="form-group">
-        
       </div>
 
       <h2>Previous Work Experience Details</h2>
@@ -105,14 +136,17 @@ const Page4 = ({ formData, setFormData }) => {
         />
         <label>Certificate: </label>
         <input
-        type='file'
+          type="file"
+          onChange={(e) => setNewExperience({ ...newExperience, certificate: e.target.files[0] })}
         />
       </div>
       <div className="btn-container">
-        <button className='nav-button add-button' onClick={handleAddExperience}>Add</button>
+        <button className="nav-button add-button" onClick={handleAddExperience}>
+          Add
+        </button>
       </div>
-      
-      {workExperience.length > 0 && (
+
+      {formData.entranceAndWorkExperience.workExperience && formData.entranceAndWorkExperience.workExperience.length > 0 && (
         <table className="experience-table">
           <thead>
             <tr>
@@ -122,12 +156,14 @@ const Page4 = ({ formData, setFormData }) => {
             </tr>
           </thead>
           <tbody>
-            {workExperience.map((exp, index) => (
+            {formData.entranceAndWorkExperience.workExperience.map((exp, index) => (
               <tr key={index}>
                 <td>{exp.employerName}</td>
                 <td>{exp.role}</td>
                 <td>{exp.expYears}</td>
-                <td><button onClick={() => handleRemoveExperience(index)}>Remove</button></td>
+                <td>
+                  <button onClick={() => handleRemoveExperience(index)}>Remove</button>
+                </td>
               </tr>
             ))}
           </tbody>

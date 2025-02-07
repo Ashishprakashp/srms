@@ -226,3 +226,89 @@ body, html {
 .main-content{
   margin-top: 100px;
 }
+
+/* Background overlay when password reset is required */
+.blur-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* Semi-transparent overlay */
+  backdrop-filter: blur(5px); /* Apply blur */
+  pointer-events: none; /* Disable interactions */
+  z-index: 1;
+}
+
+/* Disable interactions for background content */
+.blurred {
+  filter: blur(5px);
+  pointer-events: none; /* Prevent clicks */
+}
+
+/* Password reset form styling */
+.fa-reset-pw {
+  
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px 50px 20px 50px;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+/* Styling for inputs */
+.fa-reset-pw form {
+  
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Add space between inputs */
+}
+
+.field{
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 22px !important;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-width: 150px;
+}
+
+.fa-reset-pw h2{
+  font-size: 25px !important;
+  font-family: 'Kanit', sans-serif;
+  margin-bottom: 10px;
+}
+
+/* Button Styling */
+button, input[type="submit"] {
+  text-align: center;
+  font-size: 18px;
+  background-color: #7e2957;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover, input[type="submit"]:hover {
+  background-color: #5a1f40;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: row !important;
+  justify-content: space-between; /* Distributes space evenly */
+  gap: 10px; /* Adds spacing between buttons */
+  width: 100%; /* Ensures it takes full width */
+  margin-top: 15px; /* Adds spacing from inputs */
+}

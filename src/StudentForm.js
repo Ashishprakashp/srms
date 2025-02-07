@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Page1 from './Page1';
 import Page2 from './Page2';
 import Page3 from './Page3';
@@ -13,59 +14,82 @@ const StudentForm = () => {
   const prevPage = () => setCurrentPage(currentPage - 1);
 
   const [formData, setFormData] = useState({
-    // Page 1 fields
-    name: '',
-    register: '',
-    dob: '',
-    sex: '',
-    blood: '--',
-    community: '--',
-    cutoff: '',
-    splcategory: 'None',
-    scholarship: '',
-    volunteer: 'None',
-    contact: '',
-    mail: '',
-    fa: 'None',
+    personalInformation: {
+      name: '',
+      register: '',
+      dob: null,  // Date initialized as null
+      sex: '',
+      blood: 'B-',  // Default to B-
+      community: 'SC',  // Default to SC
+      cutoff: null,  // Null for percentage
+      splcategory: 'None',  // Default to None
+      scholarship: '',
+      volunteer: 'None',  // Default to None
+      contact: '',
+      mail: '',
+      fa: 'None',  // Default to None
+      passportPhoto: ''
+    },
   
-    // Page 2 fields (Parents Details)
-    fatherName: '',
-    fatherOcc: '',
-    fatherInc: '',
-    motherName: '',
-    motherOcc: '',
-    motherInc: '',
-    parentAddr: '',
-    parentContact: '',
-    parentMail: '',
-    guardianAddr: '',
-    guardianContact: '',
-    guardianMail: '',
+    familyInformation: {
+      fatherName: '',
+      fatherOcc: '',
+      fatherInc: null,  // Null for numeric input
+      motherName: '',
+      motherOcc: '',
+      motherInc: null,  // Null for numeric input
+      parentAddr: '',
+      parentContact: '',
+      parentMail: '',
+      guardianAddr: '',
+      guardianContact: '',
+      guardianMail: ''
+    },
   
-    // Page 3 fields (School Education Details)
-    ug: '', // UG degree (BE, BTech, Bsc, BCA)
-    ugCollege: '', // Name of the Institute
-    ugYear: '', // Year of Passing
-    ugPercentage: '', // Percentage
-    xiiBoard: '', // Class XII Board (cbse, state-board)
-    xiiSchool: '', // Name of the School
-    xiiYear: '', // Year of Passing
-    xiiPercentage: '', // Percentage
-    xBoard: '', // Class X Board (cbse, state-board)
-    xSchool: '', // Name of the School
-    xYear: '', // Year of Passing
-    xPercentage: '', // Percentage
+    education: {
+      ug: '',  // UG degree (BE, BTech, Bsc, BCA)
+      ugCollege: '',  // Name of the Institute
+      ugYear: null,  // Null for year
+      ugPercentage: null,  // Null for numeric input
+      ugProvisionalCertificate: '',
+      xiiBoard: '',  // Class XII Board (cbse, state-board)
+      xiiSchool: '',  // Name of the School
+      xiiYear: null,  // Null for year
+      xiiPercentage: null,  // Null for numeric input
+      xiiMarksheet: '',
+      xBoard: '',  // Class X Board (cbse, state-board)
+      xSchool: '',  // Name of the School
+      xYear: null,  // Null for year
+      xPercentage: null,  // Null for numeric input
+      xMarksheet: ''
+    },
   
-    // Page 4 fields (Entrance Exam Details)
-    entrance: '', // Entrance Exam (TANCET, GATE)
-    entranceRegister: '', // Register Number
-    entranceScore: '', // Score
-    entranceYear: '', // Year
-    workExperiences: [] // Array to store multiple work experiences
+    entranceAndWorkExperience: {
+      entrance: '',  // Entrance Exam (TANCET, GATE)
+      entranceRegister: '',  // Register Number
+      entranceScore: null,  // Null for numeric input
+      entranceYear: null,  // Null for year
+      scorecard: '',
+      workExperience: [{
+        employerName: '',
+        role: '',
+        expYears: null,  // Null for numeric input
+        certificate: ''
+      }]
+    }
   });
+  
 
-  const handleSubmit = () => {
+  const handleSubmit = async(req,res) => {
+    
+    
     console.log('Form Data: ', formData);
+    try{
+      const response = await axios.post("http://localhost:5000/student",{student: formData});
+      console.log(response);
+    }catch(error){
+      alert("Error saving student details: " + error.message);
+    }
   };
 
   const renderPage = () => {

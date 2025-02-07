@@ -1,7 +1,19 @@
 import React from 'react';
-import './Page1.css'
+import './Page1.css';
 
 const Page2 = ({ formData, setFormData }) => {
+  const safeFormData = formData || { familyInformation: {} };
+
+  const handleFamilyChange = (field, value) => {
+    setFormData({
+      ...formData,
+      familyInformation: {
+        ...formData.familyInformation,
+        [field]: value
+      }
+    });
+  };
+
   return (
     <div className="page1-container">
       <h2>Page 2: Parents Details</h2>
@@ -10,99 +22,95 @@ const Page2 = ({ formData, setFormData }) => {
         <label>Father's Name (with initial at last):</label>
         <input
           type="text"
-          value={formData.fatherName}
-          onChange={(e) => setFormData({ ...formData, fatherName: e.target.value })}
+          value={safeFormData.familyInformation.fatherName || ''}
+          onChange={(e) => handleFamilyChange('fatherName', e.target.value)}
         />
         <label>Father's Occupation:</label>
         <input
           type="text"
-          value={formData.fatherOcc}
-          onChange={(e) => setFormData({ ...formData, fatherOcc: e.target.value })}
+          value={safeFormData.familyInformation.fatherOcc || ''}
+          onChange={(e) => handleFamilyChange('fatherOcc', e.target.value)}
         />
-        
       </div>
 
       <div className="form-group">
-      <label>Father's Annual income:</label>
+        <label>Father's Annual income:</label>
         <input
           type="number"
-          value={formData.fatherInc}
-          onChange={(e) => setFormData({ ...formData, fatherInc: e.target.value })}
+          value={safeFormData.familyInformation.fatherInc || ''}
+          onChange={(e) => handleFamilyChange('fatherInc', e.target.value)}
         />
       </div>
 
       <div className="form-group">
-        <label>mother's Name (with initial at last):</label>
+        <label>Mother's Name (with initial at last):</label>
         <input
-        type="text"
-        value={formData.motherName}
-        onChange={(e) => setFormData({ ...formData, motherName: e.target.value })}
+          type="text"
+          value={safeFormData.familyInformation.motherName || ''}
+          onChange={(e) => handleFamilyChange('motherName', e.target.value)}
         />
-        <label>mother's Occupation:</label>
+        <label>Mother's Occupation:</label>
         <input
-        type="text"
-        value={formData.motherOcc}
-        onChange={(e) => setFormData({ ...formData, motherOcc: e.target.value })}
+          type="text"
+          value={safeFormData.familyInformation.motherOcc || ''}
+          onChange={(e) => handleFamilyChange('motherOcc', e.target.value)}
         />
-        
-
       </div>
 
       <div className="form-group">
-      <label>mother's Annual income:</label>
+        <label>Mother's Annual income:</label>
         <input
-        type="number"
-        value={formData.motherInc}
-        onChange={(e) => setFormData({ ...formData, motherInc: e.target.value })}
+          type="number"
+          value={safeFormData.familyInformation.motherInc || ''}
+          onChange={(e) => handleFamilyChange('motherInc', e.target.value)}
         />
       </div>
 
       <div className="form-group2">
-      <label>Name & Address of parent:</label>
+        <label>Name & Address of parent:</label>
         <textarea
-        value={formData.parentAddr}
-        onChange={(e) => setFormData({ ...formData, parentAddr: e.target.value })}
-        rows="5" cols="50"
+          value={safeFormData.familyInformation.parentAddr || ''}
+          onChange={(e) => handleFamilyChange('parentAddr', e.target.value)}
+          rows="5" cols="50"
         ></textarea>
-        
       </div>
-      
+
       <div className="form-group">
-      <label>parent's telephone number:</label>
+        <label>Parent's telephone number:</label>
         <input
-        type="text"
-        value={formData.parentContact}
-        onChange={(e) => setFormData({ ...formData, parentContact: e.target.value })}
+          type="text"
+          value={safeFormData.familyInformation.parentContact || ''}
+          onChange={(e) => handleFamilyChange('parentContact', e.target.value)}
         />
-        <label>parent's mail-id:</label>
+        <label>Parent's mail-id:</label>
         <input
-        type="email"
-        value={formData.parentMail}
-        onChange={(e) => setFormData({ ...formData, parentMail: e.target.value })}
+          type="email"
+          value={safeFormData.familyInformation.parentMail || ''}
+          onChange={(e) => handleFamilyChange('parentMail', e.target.value)}
         />
       </div>
 
       <div className="form-group2">
-      <label>Name & Address of guardian:</label>
+        <label>Name & Address of guardian:</label>
         <textarea
-        value={formData.guardianAddr}
-        onChange={(e) => setFormData({ ...formData, guardianAddr: e.target.value })}
-        rows="5" cols="50"
+          value={safeFormData.familyInformation.guardianAddr || ''}
+          onChange={(e) => handleFamilyChange('guardianAddr', e.target.value)}
+          rows="5" cols="50"
         ></textarea>
       </div>
 
       <div className="form-group">
-      <label>guardian's telephone number:</label>
+        <label>Guardian's telephone number:</label>
         <input
-        type="text"
-        value={formData.guardianContact}
-        onChange={(e) => setFormData({ ...formData, guardianContact: e.target.value })}
+          type="text"
+          value={safeFormData.familyInformation.guardianContact || ''}
+          onChange={(e) => handleFamilyChange('guardianContact', e.target.value)}
         />
-        <label>guardian's mail-id:</label>
+        <label>Guardian's mail-id:</label>
         <input
-        type="email"
-        value={formData.guardianMail}
-        onChange={(e) => setFormData({ ...formData, guardianMail: e.target.value })}
+          type="email"
+          value={safeFormData.familyInformation.guardianMail || ''}
+          onChange={(e) => handleFamilyChange('guardianMail', e.target.value)}
         />
       </div>
     </div>
