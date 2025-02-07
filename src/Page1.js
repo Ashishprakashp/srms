@@ -46,6 +46,18 @@ const Page1 = ({ formData, setFormData }) => {
           value={formData.personalInformation.name}
           onChange={(e) => handleChange('personalInformation', 'name', e.target.value)}
         />
+        
+        <label>Degree:</label>
+        <select
+          value={formData.personalInformation.degree}
+          onChange={(e) => handleChange('personalInformation', 'degree', e.target.value)}
+        >
+          <option value="--">--</option>
+          <option value="btech">BTech</option>
+          <option value="mtech">MTech</option>
+          <option value="mca">MCA</option>
+        </select>
+
         <label>Register Number:</label>
         <input
           type="text"

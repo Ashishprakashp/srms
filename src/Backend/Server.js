@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
+import axios from 'axios';
 
 dotenv.config();
 const app = express();
@@ -19,12 +20,19 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 // Define Schema and model
 const FacultySchema = new mongoose.Schema({
-    facultyId: String,
+    userId: String,
     title: String,
     name: String,
     designation: String,
     pwd: String,
     reset: Number,
+});
+
+const StudentAccSchema = new mongoose.Schema({
+  userId: String,
+  name: String,
+  pwd: String,
+  reset: Number,
 });
 
 // const StudentSchema = new mongoose.Schema({
@@ -166,6 +174,8 @@ const Faculty = mongoose.model("Faculty", FacultySchema);
 
 const Student = mongoose.model("Student", StudentSchema);
 
+const StudentAcc = mongoose.model("StudentAcc",StudentAccSchema);
+
 // Password hashing and verification functions
 const hashPassword = async (password) => {
     const saltRounds = 10;
@@ -176,20 +186,21 @@ const verifyPassword = async (password, hashedPassword) => {
     return await bcrypt.compare(password, hashedPassword);
 };
 
-const validatePassword = (password) => {
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return regex.test(password);
-};
+  const validatePassword = (password) => {
+      const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      return regex.test(password);
+  };
 
 // API routes for  faculty
-app.get("/faculty", async (req, res) => {
+app.get("/faculty/fetch", async (req, res) => {
     try {
-        const { facultyId, facultyName } = req.query;
+        const { userId, userName } = req.query;
         let query = {};
-        if (facultyId) query.facultyId = facultyId;
-        else if (facultyName) query.name = facultyName;
+        if (userId) query.userId = userId;
+        else if (userName) query.name = userName;
 
         const faculties = await Faculty.find(query);
+        console.log(faculties);
         res.json(faculties);
     } catch (error) {
         res.status(500).send("Error fetching faculty details: " + error.message);
@@ -197,32 +208,33 @@ app.get("/faculty", async (req, res) => {
 });
 
 app.put("/faculty/resetPassword", async (req, res) => {
-    const { facultyId, newPassword } = req.body;
-
-    if (!facultyId || !newPassword) {
+    const { userId, newPassword } = req.body;
+    console.log("1");
+    if (!userId || !newPassword) {
         return res.status(400).json({ message: "Faculty ID and new password are required." });
     }
-
+    console.log("2");
     if (!validatePassword(newPassword)) {
         return res.status(400).json({ message: "Password does not meet complexity requirements." });
     }
-
-    const faculty = await Faculty.findOne({ facultyId });
+    console.log("3");
+    const faculty = await Faculty.findOne({ userId });
+    console.log("4");
     if (!faculty) {
         return res.status(404).json({ message: "Faculty not found." });
     }
-
+    console.log("5");
     const hashedPassword = await hashPassword(newPassword);
     faculty.pwd = hashedPassword;
     await faculty.save();
-
+    console.log("6");
     res.status(200).json({ message: "Password reset successfully!" });
 });
 
 app.put("/faculty/resetPasswordOnce", async (req, res) => {
     const { facultyId, newPassword ,reset} = req.body;
 
-    if (!facultyId || !newPassword) {
+    if (!facultyId || !newPassword) { 
         return res.status(400).json({ message: "Faculty ID and new password are required." });
     }
 
@@ -246,14 +258,17 @@ app.put("/faculty/resetPasswordOnce", async (req, res) => {
 
 app.post("/faculty", async (req, res) => {
     try {
-        const faculties = req.body.faculties;
-
-        const existingFaculties = await Faculty.find({ facultyId: { $in: faculties.map(f => f.facultyId) } });
-        const existingFacultyIds = existingFaculties.map(f => f.facultyId);
-        const newFaculties = faculties.filter(f => !existingFacultyIds.includes(f.facultyId));
-
+        const faculties = req.body.users;
+        console.log("1");
+        const existingFaculties = await Faculty.find({ userId: { $in: faculties.map(f => f.userId) } });
+        console.log("2");
+        const existingFacultyIds = existingFaculties.map(f => f.userId);
+        console.log("3");
+        const newFaculties = faculties.filter(f => !existingFacultyIds.includes(f.userId));
+        console.log("4");
         if (newFaculties.length > 0) {
             await Faculty.insertMany(newFaculties);
+            console.log("5");
         }
 
         res.status(200).json({
@@ -307,6 +322,88 @@ app.post("/student", async (req, res) => {
     }
   });
   
+app.get("/student",async(req,res) => {
+  try{
+    const {studentId} = req.query;
+    console.log("1");
+    const student = await Student.findOne({"personalInformation.register": studentId});
+    console.log("2");
+    if(!student){
+      return res.status(404).json({ message: "Student not found." });
+    }
+    return res.json(student);
+  }catch(error){
+    console.log(error.message);
+  }
+});
+
+app.get("/student/fetch", async (req, res) => {
+  try {
+      const { userId, userName } = req.query;
+      let query = {};
+      if (userId) query.userId = userId;
+      else if (userName) query.name = userName;
+
+      const students = await StudentAcc.find(query);
+      console.log(students);
+      res.json(students);
+  } catch (error) {
+      res.status(500).send("Error fetching faculty details: " + error.message);
+  }
+});
+
+app.post("/student-acc",async(req,res) => {
+  try{
+    const students = req.body.users;
+    console.log("1");
+    const existingStudents = await StudentAcc.find({ userId: { $in: students.map(s => s.userId) } });
+        console.log("2");
+        const existingStudentIds = existingStudents.map(s => s.userId);
+        console.log("3");
+        const newStudents = students.filter(s => !existingStudentIds.includes(s.userId));
+        console.log(newStudents);
+        console.log("4");
+        if (newStudents.length > 0) {
+            await StudentAcc.insertMany(newStudents);
+            console.log("5");
+        }
+
+        res.status(200).json({
+            message: newStudents.length > 0 ? "New faculty details saved successfully" : "No new faculty added",
+            newStudents: newStudents,
+            existingStudents: existingStudents
+        });
+
+  }catch(error){
+    return res.status(500).send("Error saving student details: " + error.message);
+  }
+});
+
+app.put("/student/resetPassword", async (req, res) => {
+  const { userId, newPassword } = req.body;
+  console.log("1");
+  if (!userId || !newPassword) {
+      return res.status(400).json({ message: "Student ID and new password are required." });
+  }
+  console.log("2");
+  if (!validatePassword(newPassword)) {
+      return res.status(400).json({ message: "Password does not meet complexity requirements." });
+  }
+  console.log("3");
+  const student = await StudentAcc.findOne({ userId });
+  if (!student) {
+      return res.status(404).json({ message: "Faculty not found." });
+  }
+  console.log("4");
+  const hashedPassword = await hashPassword(newPassword);
+  console.log("5");
+  student.pwd = hashedPassword;
+  console.log("6");
+  await student.save();
+  console.log("7");
+  res.status(200).json({ message: "Password reset successfully!" });
+});
+
 
 // Start Server
 const PORT = process.env.PORT || 5000;

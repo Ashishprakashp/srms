@@ -13,20 +13,35 @@ export default function AdminDashboard({services}) {
   const [service, setServices] = useState(services);
   
 
-  const handleServiceClick= (serviceTitle)=>{
+  const handleServiceClick= (serviceTitle,serviceDesc)=>{
     if(serviceTitle==="Faculty Management"){
       setServices([...services]);
-      navigate('/select-activity');  
+      navigate('/faculty-dashboard/select-activity');  
       
     }
-    if(serviceTitle==="Create Credentials"){
+    if(serviceTitle==="Student Management"){
       setServices([...services]);
-      navigate('/faculty-management');
+      navigate('/student-dashboard/select-activity');  
       
     }
-    if(serviceTitle==="Reset Credentials"){
+    if(serviceTitle==="Create Credentials" && serviceDesc==="Admin Create"){
       setServices([...services]);
-      navigate('/reset-credentials');
+      navigate('/faculty-dashboard/select-activity/faculty-management');
+      
+    }
+    if(serviceTitle==="Reset Credentials" && serviceDesc==="Admin Reset"){
+      setServices([...services]);
+      navigate('/faculty-dashboard/select-activity/reset-credentials');
+      
+    }
+    if(serviceTitle==="Create Credentials" && serviceDesc==="Student Create"){
+      setServices([...services]);
+      navigate('/faculty-dashboard/select-activity/student-management');
+      
+    }
+    if(serviceTitle==="Reset Credentials" && serviceDesc==="Student Reset"){
+      setServices([...services]);
+      navigate('/faculty-dashboard/select-activity/student-reset-credentials');
       
     }
   }
@@ -39,7 +54,7 @@ export default function AdminDashboard({services}) {
       <div className="main-content">
         <div className="card-container">
           {services.map((service, index) => (
-            <div key={index} className="card" onClick={()=>handleServiceClick(service.title)}>
+            <div key={index} className="card" onClick={()=>handleServiceClick(service.title,service.description)}>
               <img src={service.image} alt={service.title} className="card-image" />
               <h3>{service.title}</h3>
               <p>{service.description}</p>

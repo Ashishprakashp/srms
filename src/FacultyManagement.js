@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 import AdminTitleBar from "./AdminTitleBar";
-import './FacultyManagement.css';
+import "./FacultyManagement.css";
 import Folder from "./res/folder.png";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import * as XLSX from "xlsx";
 
-export default function FacultyManagement() {
+export default function FacultyManagement({ userType }) {
     const [fileName, setFileName] = useState('');
-    const [faculties, setFaculties] = useState([]);
-    const [faculty, setFaculty] = useState({ facultyId: "", title: "--Title--", name: "", designation: "--Designation--", pwd: "" ,reset:0});
+    const [users, setUsers] = useState([]);
+    const [user, setUser] = useState({
+        userId: "",
+        title: userType === "faculty" ? "--Title--" : "",
+        name: "",
+        designation: userType === "faculty" ? "--Designation--" : "",
+        pwd: "",
+        reset: 0,
+    });
 
     const getTimestamp = () => new Date().toISOString().replace(/[-T:]/g, "_").split(".")[0];
 
@@ -19,21 +26,28 @@ export default function FacultyManagement() {
     };
 
     const handleInputChange = (e) => {
-        setFaculty({ ...faculty, [e.target.name]: e.target.value });
+        setUser({ ...user, [e.target.name]: e.target.value });
     };
 
-    const handleAddFaculty = () => {
-        const { facultyId, title, name, designation } = faculty;
-        if (!facultyId || !name || title === "--Title--" || designation === "--Designation--") {
+    const handleAddUser = () => {
+        const { userId, title, name, designation } = user;
+        if (!userId || !name || (userType === "faculty" && (title === "--Title--" || designation === "--Designation--"))) {
             alert("Please fill all fields correctly!");
             return;
         }
-        const newFaculty = { ...faculty, pwd: nanoid(12) };
-        setFaculties([...faculties, newFaculty]);
-        setFaculty({ facultyId: "", title: "--Title--", name: "", designation: "--Designation--", pwd: "" ,reset:0});
+        const newUser = { ...user, pwd: nanoid(12) };
+        setUsers([...users, newUser]);
+        setUser({
+            userId: "",
+            title: userType === "faculty" ? "--Title--" : "",
+            name: "",
+            designation: userType === "faculty" ? "--Designation--" : "",
+            pwd: "",
+            reset: 0,
+        });
     };
 
-    const removeFaculty = (index) => setFaculties(faculties.filter((_, i) => i !== index));
+    const removeUser = (index) => setUsers(users.filter((_, i) => i !== index));
 
     const readXLSFile = (file) =>
         new Promise((resolve, reject) => {
@@ -46,19 +60,19 @@ export default function FacultyManagement() {
             reader.readAsArrayBuffer(file);
         });
 
-    const addToDatabase = async (facultyList) => {
-        if (!facultyList.length) {
-            alert("No faculty data to save!");
+    const addToDatabase = async (userList) => {
+        if (!userList.length) {
+            alert("No user data to save!");
             return false;
         }
         try {
-            const response = await axios.post('http://localhost:5000/faculty', { faculties: facultyList });
-            console.log(response);
+            const endpoint = userType === "faculty" ? "faculty" : "student-acc";
+            const response = await axios.post(`http://localhost:5000/${endpoint}`, { users: userList });
             alert(response.data.message);
-            setFaculties([]);
+            setUsers([]);
             return true;
         } catch (error) {
-            alert("Error saving faculty details: " + error.message);
+            alert("Error saving user details: " + error.message);
             return false;
         }
     };
@@ -72,16 +86,16 @@ export default function FacultyManagement() {
 
         try {
             const jsonData = await readXLSFile(inputElement.files[0]);
-            const formattedData = jsonData.map(item => ({
-                facultyId: item["Faculty ID"] || "",
-                title: item["Title"] || "--Title--",
+            const formattedData = jsonData.map((item) => ({
+                userId: item["User ID"] || "",
+                title: userType === "faculty" ? item["Title"] || "--Title--" : "",
                 name: item["Name"] || "",
-                designation: item["Designation"] || "--Designation--",
+                designation: userType === "faculty" ? item["Designation"] || "--Designation--" : "",
                 pwd: nanoid(12),
-                reset:0
+                reset: 0,
             }));
 
-            setFaculties((prev) => [...prev, ...formattedData]);
+            setUsers((prev) => [...prev, ...formattedData]);
 
             if (await addToDatabase(formattedData)) {
                 generateXLS(formattedData);
@@ -91,16 +105,17 @@ export default function FacultyManagement() {
         }
     };
 
-    
-    const generateXLS = async(data) => {
+    const generateXLS = async (data) => {
+        console.log(data);
         if (!data.length) return;
         if (await addToDatabase(data)) {
-            const ws = XLSX.utils.json_to_sheet(data.map(({ facultyId, name, pwd }) => ({ "Faculty ID": facultyId, Name: name, Password: pwd ,reset:0})));
+            const ws = XLSX.utils.json_to_sheet(
+                data.map(({ userId, name, pwd }) => ({ "User ID": userId, Name: name, Password: pwd, reset: 0 }))
+            );
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "FacultyCredentials");
-            XLSX.writeFile(wb, `FC_${getTimestamp()}.xls`);
+            XLSX.utils.book_append_sheet(wb, ws, "UserCredentials");
+            XLSX.writeFile(wb, `${userType.toUpperCase()}_CREDENTIALS_${getTimestamp()}.xls`);
         }
-        
     };
 
     return (
@@ -108,38 +123,44 @@ export default function FacultyManagement() {
             <AdminTitleBar title="IST Student Records Admin" />
 
             <div id="top-container">
-                <h1 className="page-title">Manual Credentials Creation</h1>
+                <h1 className="page-title">{userType === "faculty" ? "Faculty" : "Student"} Credentials Creation</h1>
                 <form>
                     <div className="first-line">
-                        <input type="text" name="facultyId" placeholder="Faculty Id" className="field" value={faculty.facultyId} onChange={handleInputChange} />
-                        <select name="title" className="field" value={faculty.title} onChange={handleInputChange}>
-                            <option>--Title--</option>
-                            <option>Nil</option>
-                            <option>Dr.</option>
-                        </select>
-                        <input type="text" name="name" placeholder="Name" className="field" value={faculty.name} onChange={handleInputChange} />
-                        <select name="designation" className="field" value={faculty.designation} onChange={handleInputChange}>
-                            <option>--Designation--</option>
-                            <option>Teaching Fellow</option>
-                            <option>Asst. Professor</option>
-                            <option>Professor</option>
-                            <option>Head Of Dept.</option>
-                        </select>
+                        <input type="text" name="userId" placeholder="User ID" className="field" value={user.userId} onChange={handleInputChange} />
+                        {userType === "faculty" && (
+                            <select name="title" className="field" value={user.title} onChange={handleInputChange}>
+                                <option>--Title--</option>
+                                <option>Nil</option>
+                                <option>Dr.</option>
+                            </select>
+                        )}
+                        <input type="text" name="name" placeholder="Name" className="field" value={user.name} onChange={handleInputChange} />
+                        {userType === "faculty" && (
+                            <select name="designation" className="field" value={user.designation} onChange={handleInputChange}>
+                                <option>--Designation--</option>
+                                <option>Teaching Fellow</option>
+                                <option>Asst. Professor</option>
+                                <option>Professor</option>
+                                <option>Head Of Dept.</option>
+                            </select>
+                        )}
                     </div>
                     <div className="first-line button-group">
-                        <button type="button" className="btn" onClick={handleAddFaculty}>Add Faculty</button>
+                        <button type="button" className="btn" onClick={handleAddUser}>
+                            Add {userType === "faculty" ? "Faculty" : "Student"}
+                        </button>
                     </div>
 
-                    <FacultyTable faculties={faculties} removeFaculty={removeFaculty} />
+                    <UserTable users={users} removeUser={removeUser} />
 
-                    <button type="button" className="btn" onClick={() => generateXLS(faculties)}>
+                    <button type="button" className="btn" onClick={() => generateXLS(users)}>
                         Generate & Download Credentials
                     </button>
                 </form>
             </div>
 
             <div id="bottom-container">
-                <h1 className="page-title">Automatic Credentials Creation</h1>
+                <h1 className="page-title">Upload {userType === "faculty" ? "Faculty" : "Student"} Data</h1>
                 <form>
                     <div className="file-upload-container">
                         <p>Upload .xls file:</p>
@@ -148,7 +169,7 @@ export default function FacultyManagement() {
                         </label>
                         <input type="file" id="file" className="file-input" onChange={handleFileChange} />
                     </div>
-                    <span className="file-name">{fileName || 'No file chosen'}</span>
+                    <span className="file-name">{fileName || "No file chosen"}</span>
                     <button type="button" className="btn" onClick={generateFile}>
                         Generate & Download Credentials
                     </button>
@@ -158,25 +179,23 @@ export default function FacultyManagement() {
     );
 }
 
-const FacultyTable = ({ faculties, removeFaculty }) => (
-    <table className="faculty-table">
+const UserTable = ({ users, removeUser }) => (
+    <table className="user-table">
         <thead>
             <tr>
-                <th>FacultyId</th>
-                <th>Title</th>
+                <th>User ID</th>
                 <th>Name</th>
-                <th>Designation</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            {faculties.map((faculty, index) => (
+            {users.map((user, index) => (
                 <tr key={index}>
-                    <td>{faculty.facultyId}</td>
-                    <td>{faculty.title}</td>
-                    <td>{faculty.name}</td>
-                    <td>{faculty.designation}</td>
-                    <td><button onClick={() => removeFaculty(index)}>Remove</button></td>
+                    <td>{user.userId}</td>
+                    <td>{user.name}</td>
+                    <td>
+                        <button onClick={() => removeUser(index)}>Remove</button>
+                    </td>
                 </tr>
             ))}
         </tbody>
