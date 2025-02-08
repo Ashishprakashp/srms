@@ -5,7 +5,7 @@ import PassportPhotoUpload from './PassportPhotoUpload';
 
 const Page1 = ({ formData, setFormData }) => {
   const [fileName, setFileName] = React.useState('');
-
+  const branch = sessionStorage.getItem("branch");
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -47,16 +47,6 @@ const Page1 = ({ formData, setFormData }) => {
           onChange={(e) => handleChange('personalInformation', 'name', e.target.value)}
         />
         
-        <label>Degree:</label>
-        <select
-          value={formData.personalInformation.degree}
-          onChange={(e) => handleChange('personalInformation', 'degree', e.target.value)}
-        >
-          <option value="--">--</option>
-          <option value="btech">BTech</option>
-          <option value="mtech">MTech</option>
-          <option value="mca">MCA</option>
-        </select>
 
         <label>Register Number:</label>
         <input
@@ -128,7 +118,11 @@ const Page1 = ({ formData, setFormData }) => {
         </select>
       </div>
 
+      
       <div className="form-group">
+      {(branch==="Btech")&&(
+        
+        <>
         <label>Cutoff Mark:</label>
         <input
           type="number"
@@ -138,6 +132,8 @@ const Page1 = ({ formData, setFormData }) => {
           value={formData.personalInformation.cutoff}
           onChange={(e) => handleChange('personalInformation', 'cutoff', e.target.value)}
         />
+        </>
+      )}
         <label>Special Category:</label>
         <select
           value={formData.personalInformation.splcategory}

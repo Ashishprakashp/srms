@@ -18,10 +18,12 @@ export default function StudentDashboard({services}) {
 const fetchAccountStatus = async () => {
     const studentId = sessionStorage.getItem("studentId");
     console.log(studentId);
-    const response = await axios.get("http://localhost:5000/student", {
-        params: { studentId: studentId }
+    const response = await axios.get("http://localhost:5000/student/fetch", {
+        params: { userId: studentId }
     });
+    sessionStorage.setItem("branch",response.data.branch);
     console.log(response.data);
+    console.log(sessionStorage.getItem("branch"));
     // if (response.data[0].reset === 0) {
     //     console.log("Password is not reset!");
     //     setIsPasswordReset(false);
@@ -44,12 +46,17 @@ const fetchAccountStatus = async () => {
     }
     if(serviceTitle==="Semester Form"){
       setServices([...services]);
-      navigate('/faculty-management');
+      navigate('/student-dashboard/semforms');
       
     }
     if(serviceTitle==="Reset Credentials"){
       setServices([...services]);
       navigate('/reset-credentials');
+      
+    }
+    if(serviceTitle==="Semester Enrollment"){
+      setServices([...services]);
+      navigate('/semester-enroll');
       
     }
   }

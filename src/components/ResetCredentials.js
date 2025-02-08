@@ -25,7 +25,7 @@ export default function ResetCredentials() {
         
         try {
             const response = await axios.put("http://localhost:5000/faculty/resetPasswordOnce", {
-                facultyId: facultyId,
+                userId: facultyId,
                 newPassword: pwd1,
                 reset:1 
             });

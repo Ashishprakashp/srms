@@ -4,6 +4,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import axios from 'axios';
+import StudentGrades from './Schemas/StudentGrades.js';
+import Student from './Schemas/StudentModel.js';
+import Semester from './Schemas/Semester.js'
+import enrollmentRoutes from "/home/ashish-prakash/Documents/pull2/src/Backend/EnrollmentRoutes/enrollment.js";
+import Course from '/home/ashish-prakash/Documents/pull2/src/Backend/Schemas/Course.js';
 
 dotenv.config();
 const app = express();
@@ -18,6 +23,8 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     .then(() => console.log("MongoDB Connected!"))
     .catch(err => console.log(err));
 
+
+
 // Define Schema and model
 const FacultySchema = new mongoose.Schema({
     userId: String,
@@ -31,148 +38,46 @@ const FacultySchema = new mongoose.Schema({
 const StudentAccSchema = new mongoose.Schema({
   userId: String,
   name: String,
+  branch: String,
   pwd: String,
   reset: Number,
 });
 
-// const StudentSchema = new mongoose.Schema({
-//     personalInformation: {
-//       name: { type: String, required: true },
-//       register: { type: String, required: true },
-//       dob: { type: Date, required: true },
-//       sex: { type: String, enum: ['M', 'F'], required: true },
-//       blood: { type: String, enum: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'], required: true },
-//       community: { type: String, enum: ['OC', 'BC', 'MBC', 'SC', 'ST'], required: true },
-//       cutoff: { type: Number, min: 0, max: 100, required: true },
-//       splcategory: { type: String, enum: ['None', 'Ph', 'Sports', 'Ex-Service man', 'NRI', 'Other States', 'Any Other'], required: true },
-//       scholarship: { type: String },
-//       volunteer: { type: String, enum: ['None', 'NSS', 'NSO', 'YRC'] },
-//       contact: { type: String, required: true },
-//       mail: { type: String, required: true },
-//       fa: { type: String, default: 'None' },
-//       passportPhoto: { type: String },
-//     },
-  
-//     familyInformation: {
-//       fatherName: { type: String, required: true },
-//       fatherOcc: { type: String, required: true },
-//       fatherInc: { type: Number, required: true },
-//       motherName: { type: String, required: true },
-//       motherOcc: { type: String, required: true },
-//       motherInc: { type: Number, required: true },
-//       parentAddr: { type: String, required: true },
-//       parentContact: { type: String, required: true },
-//       parentMail: { type: String, required: true },
-//       guardianAddr: { type: String, required: true },
-//       guardianContact: { type: String, required: true },
-//       guardianMail: { type: String, required: true },
-//     },
-  
-//     education: {
-//       ug: { type: String, enum: ['BE', 'BTech', 'Bsc', 'BCA'], required: true },
-//       ugCollege: { type: String, required: true },
-//       ugYear: { type: Number, required: true },
-//       ugPercentage: { type: Number, required: true },
-//       ugProvisionalCertificate: { type: String, required: true },
-//       xiiBoard: { type: String, enum: ['cbse', 'state-board', 'icse', 'others'], required: true },
-//       xiiSchool: { type: String, required: true },
-//       xiiYear: { type: Number, required: true },
-//       xiiPercentage: { type: Number, required: true },
-//       xiiMarksheet: { type: String, required: true },
-//       xBoard: { type: String, enum: ['cbse', 'state-board', 'icse', 'others'], required: true },
-//       xSchool: { type: String, required: true },
-//       xYear: { type: Number, required: true },
-//       xPercentage: { type: Number, required: true },
-//       xMarksheet: { type: String, required: true },
-//     },
-  
-//     entranceAndWorkExperience: {
-//       entrance: { type: String, enum: ['TANCET', 'GATE'], required: true },
-//       entranceRegister: { type: String, required: true },
-//       entranceScore: { type: Number, required: true },
-//       entranceYear: { type: Number, required: true },
-//       scorecard: { type: String },
-//       workExperience: [{
-//         employerName: { type: String, required: true },
-//         role: { type: String, required: true },
-//         expYears: { type: Number, required: true },
-//         certificate: { type: String },
-//       }],
-//     },
-  
-//   }, { timestamps: true });
 
-const StudentSchema = new mongoose.Schema({
-    personalInformation: {
-      name: { type: String, default: '' },
-      register: { type: String, default: '' },
-      dob: { type: Date, default: null },
-      sex: { type: String, enum: ['M', 'F'], default: '' },
-      blood: { type: String, enum: ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'], default: '' },
-      community: { type: String, enum: ['OC', 'BC', 'MBC', 'SC', 'ST'], default: '' },
-      cutoff: { type: Number, min: 0, max: 100, default: null },
-      splcategory: { type: String, enum: ['None', 'Ph', 'Sports', 'Ex-Service man', 'NRI', 'Other States', 'Any Other'], default: 'None' },
-      scholarship: { type: String, default: '' },
-      volunteer: { type: String, enum: ['None', 'NSS', 'NSO', 'YRC'], default: 'None' },
-      contact: { type: String, default: '' },
-      mail: { type: String, default: '' },
-      fa: { type: String, default: 'None' },
-      passportPhoto: { type: String, default: '' },
-    },
-  
-    familyInformation: {
-      fatherName: { type: String, default: '' },
-      fatherOcc: { type: String, default: '' },
-      fatherInc: { type: Number, default: null },
-      motherName: { type: String, default: '' },
-      motherOcc: { type: String, default: '' },
-      motherInc: { type: Number, default: null },
-      parentAddr: { type: String, default: '' },
-      parentContact: { type: String, default: '' },
-      parentMail: { type: String, default: '' },
-      guardianAddr: { type: String, default: '' },
-      guardianContact: { type: String, default: '' },
-      guardianMail: { type: String, default: '' },
-    },
-  
-    education: {
-      ug: { type: String, enum: ['BE', 'BTech', 'Bsc', 'BCA'], default: '' },
-      ugCollege: { type: String, default: '' },
-      ugYear: { type: Number, default: null },
-      ugPercentage: { type: Number, default: null },
-      ugProvisionalCertificate: { type: String, default: '' },
-      xiiBoard: { type: String, enum: ['cbse', 'state-board', 'icse', 'others'], default: '' },
-      xiiSchool: { type: String, default: '' },
-      xiiYear: { type: Number, default: null },
-      xiiPercentage: { type: Number, default: null },
-      xiiMarksheet: { type: String, default: '' },
-      xBoard: { type: String, enum: ['cbse', 'state-board', 'icse', 'others'], default: '' },
-      xSchool: { type: String, default: '' },
-      xYear: { type: Number, default: null },
-      xPercentage: { type: Number, default: null },
-      xMarksheet: { type: String, default: '' },
-    },
-  
-    entranceAndWorkExperience: {
-      entrance: { type: String, enum: ['TANCET', 'GATE'], default: '' },
-      entranceRegister: { type: String, default: '' },
-      entranceScore: { type: Number, default: null },
-      entranceYear: { type: Number, default: null },
-      scorecard: { type: String, default: '' },
-      workExperience: [{
-        employerName: { type: String, default: '' },
-        role: { type: String, default: '' },
-        expYears: { type: Number, default: null },
-        certificate: { type: String, default: '' },
-      }],
-    },
-  
-  }, { timestamps: true });
-  
+const CourseSchema = new mongoose.Schema({
+  type: String,
+  course_code: String,
+  course_title: String,
+  category: String,
+  L: Number, // Lecture hours
+  T: Number, // Tutorial hours
+  P: Number, // Practical hours
+  total_contact_periods: Number,
+  credits: Number
+});
+
+const SemesterSchema = new mongoose.Schema({
+  semester: Number,
+  courses: [CourseSchema] // Array of courses
+});
+
+const SemsSchema = new mongoose.Schema({
+  branch: String,
+  regulation: String,
+  semesters: [SemesterSchema] // Array of semesters
+});
+
+const Sems = mongoose.model('Sems', SemsSchema);
+
+
+
+
+//Schema to track student performance
+
 
 const Faculty = mongoose.model("Faculty", FacultySchema);
 
-const Student = mongoose.model("Student", StudentSchema);
+
 
 const StudentAcc = mongoose.model("StudentAcc",StudentAccSchema);
 
@@ -191,192 +96,266 @@ const verifyPassword = async (password, hashedPassword) => {
       return regex.test(password);
   };
 
-// API routes for  faculty
-app.get("/faculty/fetch", async (req, res) => {
-    try {
-        const { userId, userName } = req.query;
-        let query = {};
-        if (userId) query.userId = userId;
-        else if (userName) query.name = userName;
-
-        const faculties = await Faculty.find(query);
-        console.log(faculties);
-        res.json(faculties);
-    } catch (error) {
-        res.status(500).send("Error fetching faculty details: " + error.message);
-    }
-});
-
-app.put("/faculty/resetPassword", async (req, res) => {
-    const { userId, newPassword } = req.body;
-    console.log("1");
-    if (!userId || !newPassword) {
-        return res.status(400).json({ message: "Faculty ID and new password are required." });
-    }
-    console.log("2");
-    if (!validatePassword(newPassword)) {
-        return res.status(400).json({ message: "Password does not meet complexity requirements." });
-    }
-    console.log("3");
-    const faculty = await Faculty.findOne({ userId });
-    console.log("4");
-    if (!faculty) {
-        return res.status(404).json({ message: "Faculty not found." });
-    }
-    console.log("5");
-    const hashedPassword = await hashPassword(newPassword);
-    faculty.pwd = hashedPassword;
-    await faculty.save();
-    console.log("6");
-    res.status(200).json({ message: "Password reset successfully!" });
-});
-
-app.put("/faculty/resetPasswordOnce", async (req, res) => {
-    const { facultyId, newPassword ,reset} = req.body;
-
-    if (!facultyId || !newPassword) { 
-        return res.status(400).json({ message: "Faculty ID and new password are required." });
-    }
-
-    if (!validatePassword(newPassword)) {
-        return res.status(400).json({ message: "Password does not meet complexity requirements." });
-    }
-
-    const faculty = await Faculty.findOne({ facultyId });
-    if (!faculty) {
-        return res.status(404).json({ message: "Faculty not found." });
-    }
-    console.log(faculty);
-    console.log(faculty.reset); 
-    const hashedPassword = await hashPassword(newPassword);
-    faculty.pwd = hashedPassword;
-    faculty.reset= reset;
-    await faculty.save();
-    console.log(faculty.reset); 
-    res.status(200).json({ message: "Password reset successfully!" });
-});
-
+//post API routes
 app.post("/faculty", async (req, res) => {
-    try {
-        const faculties = req.body.users;
-        console.log("1");
-        const existingFaculties = await Faculty.find({ userId: { $in: faculties.map(f => f.userId) } });
-        console.log("2");
-        const existingFacultyIds = existingFaculties.map(f => f.userId);
-        console.log("3");
-        const newFaculties = faculties.filter(f => !existingFacultyIds.includes(f.userId));
-        console.log("4");
-        if (newFaculties.length > 0) {
-            await Faculty.insertMany(newFaculties);
-            console.log("5");
-        }
+  try {
+      const faculties = req.body.users;
+      console.log("1");
+      const existingFaculties = await Faculty.find({ userId: { $in: faculties.map(f => f.userId) } });
+      console.log("2");
+      const existingFacultyIds = existingFaculties.map(f => f.userId);
+      console.log("3");
+      const newFaculties = faculties.filter(f => !existingFacultyIds.includes(f.userId));
+      console.log("4");
+      if (newFaculties.length > 0) {
+          await Faculty.insertMany(newFaculties);
+          console.log("5");
+      }
 
-        res.status(200).json({
-            message: newFaculties.length > 0 ? "New faculty details saved successfully" : "No new faculty added",
-            newFaculties: newFaculties,
-            existingFaculties: existingFaculties
-        });
-    } catch (error) {
-        res.status(500).send("Error saving faculty details: " + error.message);
-    }
+      res.status(200).json({
+          message: newFaculties.length > 0 ? "New faculty details saved successfully" : "No new faculty added",
+          newFaculties: newFaculties,
+          existingFaculties: existingFaculties
+      });
+  } catch (error) {
+      res.status(500).send("Error saving faculty details: " + error.message);
+  }
 });
 
 //API routes for Student
 
 app.post("/student", async (req, res) => {
-    try {
-      const student = req.body.student;
-      console.log("Received student data:", student);  // Log the incoming data
-  
-      // Check if student already exists
-      const existingRecord = await Student.find({ "personalInformation.register": student.register });
-      console.log("Existing records found:", existingRecord);
-  
-      if (existingRecord.length > 0) {
-        console.log("The student has already registered!");
-        return res.status(400).json({ message: "Student data already exists!" });
-      } else {
-        console.log("The student is registering for the first time!");
-  
-        // Log the student object before creating it
-        console.log("Creating student with data:", student);
-  
-        // Attempt to create the student document
-        const newStudent = await Student.create(student);
-        console.log("Student created successfully:", newStudent);
-  
-        return res.status(200).json({
-          message: "Student data stored successfully!"
-        });
-      }
-    } catch (error) {
-      console.error("Error during student registration:", error);  // Log the error with more details
-  
-      // Handle validation or other errors
-      if (error.name === 'ValidationError') {
-        const validationErrors = Object.values(error.errors).map(err => err.message);
-        return res.status(400).json({ message: "Validation error", errors: validationErrors });
-      }
-  
-      return res.status(500).send("Error saving student details: " + error.message);
-    }
-  });
-  
-app.get("/student",async(req,res) => {
-  try{
-    const {studentId} = req.query;
-    console.log("1");
-    const student = await Student.findOne({"personalInformation.register": studentId});
-    console.log("2");
-    if(!student){
-      return res.status(404).json({ message: "Student not found." });
-    }
-    return res.json(student);
-  }catch(error){
-    console.log(error.message);
-  }
-});
-
-app.get("/student/fetch", async (req, res) => {
   try {
-      const { userId, userName } = req.query;
-      let query = {};
-      if (userId) query.userId = userId;
-      else if (userName) query.name = userName;
+    const student = req.body.student;
+    console.log("Received student data:", student);  // Log the incoming data
 
-      const students = await StudentAcc.find(query);
-      console.log(students);
-      res.json(students);
+    // Check if student already exists
+    const existingRecord = await Student.find({ "personalInformation.register": student.register });
+    console.log("Existing records found:", existingRecord);
+
+    if (existingRecord.length > 0) {
+      console.log("The student has already registered!");
+      return res.status(400).json({ message: "Student data already exists!" });
+    } else {
+      console.log("The student is registering for the first time!");
+
+      // Log the student object before creating it
+      console.log("Creating student with data:", student);
+
+      // Attempt to create the student document
+      const newStudent = await Student.create(student);
+      console.log("Student created successfully:", newStudent);
+
+      return res.status(200).json({
+        message: "Student data stored successfully!"
+      });
+    }
   } catch (error) {
-      res.status(500).send("Error fetching faculty details: " + error.message);
-  }
-});
+    console.error("Error during student registration:", error);  // Log the error with more details
 
-app.post("/student-acc",async(req,res) => {
-  try{
-    const students = req.body.users;
-    console.log("1");
-    const existingStudents = await StudentAcc.find({ userId: { $in: students.map(s => s.userId) } });
-        console.log("2");
-        const existingStudentIds = existingStudents.map(s => s.userId);
-        console.log("3");
-        const newStudents = students.filter(s => !existingStudentIds.includes(s.userId));
-        console.log(newStudents);
-        console.log("4");
-        if (newStudents.length > 0) {
-            await StudentAcc.insertMany(newStudents);
-            console.log("5");
-        }
+    // Handle validation or other errors
+    if (error.name === 'ValidationError') {
+      const validationErrors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ message: "Validation error", errors: validationErrors });
+    }
 
-        res.status(200).json({
-            message: newStudents.length > 0 ? "New faculty details saved successfully" : "No new faculty added",
-            newStudents: newStudents,
-            existingStudents: existingStudents
-        });
-
-  }catch(error){
     return res.status(500).send("Error saving student details: " + error.message);
   }
+});
+
+
+
+app.post("/student-acc",async(req,res) => {
+try{
+  const students = req.body.users;
+  console.log("1");
+  const existingStudents = await StudentAcc.find({ userId: { $in: students.map(s => s.userId) } });
+      console.log("2");
+      const existingStudentIds = existingStudents.map(s => s.userId);
+      console.log("3");
+      const newStudents = students.filter(s => !existingStudentIds.includes(s.userId));
+      console.log(newStudents);
+      console.log("4");
+      if (newStudents.length > 0) {
+          await StudentAcc.insertMany(newStudents);
+          console.log("5");
+      }
+
+      res.status(200).json({
+          message: newStudents.length > 0 ? "New faculty details saved successfully" : "No new faculty added",
+          newStudents: newStudents,
+          existingStudents: existingStudents
+      });
+
+}catch(error){
+  return res.status(500).send("Error saving student details: " + error.message);
+}
+});
+
+app.post("/semesters/enroll", async (req, res) => {
+  try {
+    console.log("1");
+    const { enrollments } = req.body; // Extract enrollments from the request body
+    console.log("2");
+    if (!enrollments || enrollments.length === 0) {
+      return res.status(400).json({ error: "No enrollments provided" });
+    }
+    console.log("3");
+    for (const enrollment of enrollments) {
+      const { studentId, courseCode, semester, branch, grade } = enrollment;
+      console.log("4");
+      if (!studentId || !courseCode || !semester || !branch) {
+        return res.status(400).json({ error: "Missing required fields in enrollment" });
+      }
+      console.log("5");
+      // Find course
+      const course = await Course.findOne({ courseCode });
+      console.log(courseCode);
+      console.log("6");
+      if (!course) {
+        return res.status(404).json({ error: `Course ${courseCode} not found` });
+      }
+      console.log("7");
+      // Check if student is already enrolled in the course
+      const alreadyEnrolled = course.studentsEnrolled.some(
+        (student) => student.studentId === studentId
+      );
+      console.log("8");
+      if (alreadyEnrolled) {
+        return res.status(400).json({ error: `Student ${studentId} is already enrolled in ${courseCode}` });
+      }
+      console.log("9");
+      // Update Course model - Add student to the course
+      course.studentsEnrolled.push({ studentId, grade: grade || null });
+      console.log("10");
+      await course.save();
+      console.log("11");
+      // Update StudentGrades model - Add course to the student's enrolled courses
+      let student = await StudentGrades.findOne({ studentId });
+
+      if (!student) {
+        student = new StudentGrades({
+          studentId,
+          name: "Some Name",  // You may want to retrieve the student's name from somewhere (e.g., session or database)
+          branch,
+          enrolledCourses: [{ courseCode, semester, grade: grade || null }],
+        });
+      } else {
+        student.enrolledCourses.push({ courseCode, semester, grade: grade || null });
+      }
+
+      await student.save();
+    }
+
+    res.json({ message: "All enrollments successful!" });
+  } catch (error) {
+    console.error("Enrollment error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.post("/semesters/submit", async (req, res) => {
+  try {
+    const { dataToSubmit } = req.body;
+
+    if (!dataToSubmit || dataToSubmit.length === 0) {
+      return res.status(400).json({ error: "No data to submit" });
+    }
+
+    // Loop over each course and update the grade in both collections
+    for (const { studentId, courseCode, grade } of dataToSubmit) {
+      // Update Course collection
+      const course = await Course.findOne({ courseCode });
+      if (!course) {
+        return res.status(404).json({ error: `Course with code ${courseCode} not found` });
+      }
+
+      // Find the student in the course and update the grade
+      const studentIndex = course.studentsEnrolled.findIndex(
+        (student) => student.studentId === studentId
+      );
+      if (studentIndex === -1) {
+        return res.status(404).json({ error: `Student with ID ${studentId} not found in course ${courseCode}` });
+      }
+
+      course.studentsEnrolled[studentIndex].grade = grade;
+      await course.save();
+
+      // Update StudentGrades collection
+      let studentGrades = await StudentGrades.findOne({ studentId });
+      if (!studentGrades) {
+        return res.status(404).json({ error: `Student with ID ${studentId} not found in StudentGrades` });
+      }
+
+      // Find the course in the student's enrolled courses and update the grade
+      const enrolledCourseIndex = studentGrades.enrolledCourses.findIndex(
+        (course) => course.courseCode === courseCode
+      );
+      if (enrolledCourseIndex === -1) {
+        return res.status(404).json({ error: `Course with code ${courseCode} not found in student grades` });
+      }
+
+      studentGrades.enrolledCourses[enrolledCourseIndex].grade = grade;
+      await studentGrades.save();
+    }
+
+    res.json({ message: "Grades updated successfully!" });
+  } catch (error) {
+    console.error("Error updating grades:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+
+//put API routes
+app.put("/faculty/resetPassword", async (req, res) => {
+  const { userId, newPassword } = req.body;
+  console.log("1");
+  if (!userId || !newPassword) {
+      return res.status(400).json({ message: "Faculty ID and new password are required." });
+  }
+  console.log("2");
+  if (!validatePassword(newPassword)) {
+      return res.status(400).json({ message: "Password does not meet complexity requirements." });
+  }
+  console.log("3");
+  const faculty = await Faculty.findOne({ userId });
+  console.log("4");
+  if (!faculty) {
+      return res.status(404).json({ message: "Faculty not found." });
+  }
+  console.log("5");
+  const hashedPassword = await hashPassword(newPassword);
+  faculty.pwd = hashedPassword;
+  await faculty.save();
+  console.log("6");
+  res.status(200).json({ message: "Password reset successfully!" });
+});
+
+app.put("/faculty/resetPasswordOnce", async (req, res) => {
+  const { userId, newPassword ,reset} = req.body;
+
+  if (!userId || !newPassword) { 
+      return res.status(400).json({ message: "Faculty ID and new password are required." });
+  }
+
+  if (!validatePassword(newPassword)) {
+      return res.status(400).json({ message: "Password does not meet complexity requirements." });
+  }
+
+  const faculty = await Faculty.findOne({ userId });
+  if (!faculty) {
+      return res.status(404).json({ message: "Faculty not found." });
+  }
+  console.log(faculty);
+  console.log(faculty.reset); 
+  const hashedPassword = await hashPassword(newPassword);
+  faculty.pwd = hashedPassword;
+  faculty.reset= reset;
+  await faculty.save();
+  console.log(faculty.reset); 
+  res.status(200).json({ message: "Password reset successfully!" });
 });
 
 app.put("/student/resetPassword", async (req, res) => {
@@ -403,6 +382,178 @@ app.put("/student/resetPassword", async (req, res) => {
   console.log("7");
   res.status(200).json({ message: "Password reset successfully!" });
 });
+
+
+//get API routes
+app.get("/semesters/checkEnrollment", async (req, res) => {
+  try {
+    const { studentId, semester } = req.query;
+
+    if (!studentId || !semester) {
+      return res.status(400).json({ error: "Missing required query parameters" });
+    }
+
+    // Find all courses in the specified semester
+    const courses = await Course.find({ semester });
+    if (courses.length === 0) {
+      return res.status(404).json({ error: "No courses found for this semester" });
+    }
+
+    // Check if the student is enrolled in any course for the given semester
+    const alreadyEnrolled = courses.some(course =>
+      course.studentsEnrolled.some(student => student.studentId === studentId)
+    );
+
+    if (alreadyEnrolled) {
+      return res.status(200).json({ enrolled: true });
+    } else {
+      return res.status(200).json({ enrolled: false });
+    }
+  } catch (error) {
+    console.error("Error checking enrollment:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get('/semesters/check-grade-status', async (req, res) => {
+  const { studentId, semesterNo, branch } = req.query;
+
+  if (!studentId || !semesterNo || !branch) {
+    return res.status(400).json({ message: 'Missing parameters' });
+  }
+
+  try {
+    // Find student grades for the given semester and branch
+    const studentGrades = await StudentGrades.findOne({
+      studentId,
+      'enrolledCourses.semester': semesterNo,
+      'enrolledCourses.courseCode': { $exists: true }
+    });
+
+    if (!studentGrades) {
+      return res.status(404).json({ message: 'Student not found or no courses found for this semester.' });
+    }
+
+    // Check if grades are submitted for each course
+    const courseStatuses = studentGrades.enrolledCourses.map(course => ({
+      courseCode: course.courseCode,
+      grade: course.grade,
+      gradeSubmitted: course.grade !== null && course.grade !== undefined,
+      message: course.grade !== null && course.grade !== undefined 
+        ? `Grade already submitted for course ${course.courseCode}.`
+        : `Grade not submitted for course ${course.courseCode}.`
+    }));
+
+    return res.json({ courseStatuses });
+  } catch (error) {
+    console.error("Error checking grade status:", error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get("/semesters/fetch", async (req, res) => {
+  try {  
+    const { branch, semester } = req.query;
+
+    if (!branch || !semester) {
+      return res.status(400).json({ error: "Missing branch or semester" });
+    }
+
+    // Fetch semester data from MongoDB
+    const semesterData = await Semester.findOne({
+      branch,
+      semesterNumber: semester,
+    });
+    console.log(semesterData);
+    if (!semesterData) {
+      return res.status(404).json({ error: "No courses found for this semester" });
+    }
+
+    res.json(semesterData.courses); // Return courses array
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/faculty/fetch", async (req, res) => {
+    try {
+        console.log("1");
+        const { userId, userName } = req.query;
+        console.log("2");
+        let query = {};
+        if (userId) query.userId = userId;
+        
+        else if (userName) query.name = userName;
+        console.log("3");
+        const faculties = await Faculty.find(query);
+        console.log("4");
+        console.log(faculties);
+        res.json(faculties);
+    } catch (error) {
+        res.status(500).send("Error fetching faculty details: " + error.message);
+    }
+});
+
+app.get("/student",async(req,res) => {
+  try{
+    const {studentId} = req.query;
+    console.log("1");
+    const student = await Student.findOne({"personalInformation.register": studentId});
+    console.log("2");
+    if(!student){
+      return res.status(404).json({ message: "Student not found." });
+    }
+    return res.json(student);
+  }catch(error){
+    console.log(error.message);
+  }
+});
+
+app.get("/student/fetch", async (req, res) => {
+  try {
+      const { userId, userName } = req.query;
+      let query = {};
+      if (userId) query.userId = userId;
+      else if (userName) query.name = userName;
+
+      const students = await StudentAcc.findOne(query);
+      console.log(students);
+      res.json(students);
+  } catch (error) {
+      res.status(500).send("Error fetching faculty details: " + error.message);
+  }
+});
+
+app.get("/semesters/fetch", async (req, res) => {
+  try {
+    const { branch, semester } = req.query;
+    console.log("1");
+    if (!branch || !semester) {
+      return res.status(400).json({ message: "Branch and semester are required" });
+    }
+    console.log("2");
+    const semesterNumber = parseInt(semester); // Convert to number
+    console.log("3");
+    // Assuming you're using Mongoose
+    const result = await Sems.findOne(
+      { branch }, 
+      { semesters: { $elemMatch: { semester: semesterNumber } } } // Get only the matching semester
+    );
+    console.log("4");
+    if (!result || !result.semesters.length) {
+      return res.status(404).json({ message: "No courses found for the given branch and semester" });
+    }
+
+    res.status(200).json(result.semesters[0].courses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+
 
 
 // Start Server

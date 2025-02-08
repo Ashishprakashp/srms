@@ -18,8 +18,8 @@ export default function FacultyDashboard({services}) {
 const fetchAccountStatus = async () => {
     const facultyId = sessionStorage.getItem("facultyId");
     console.log(facultyId);
-    const response = await axios.get("http://localhost:5000/faculty", {
-        params: { facultyId: facultyId }
+    const response = await axios.get("http://localhost:5000/faculty/fetch", {
+        params: { userId: facultyId ,userName: ""}
     });
     console.log(response.data);
     if (response.data[0].reset === 0) {

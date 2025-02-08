@@ -10,6 +10,8 @@ import Fa_mgmt_img from "./res/Faculty_mgmt_image.jpg";
 import StudentForm from './StudentForm';
 import StudentLogin from './StudentLogin';
 import StudentDashboard from './StudentDashboard';
+import SemesterForm from './SemesterForm';
+import SemesterEnroll from './components/SemesterEnroll';
 
 function App() {
   const services1 = [
@@ -27,7 +29,7 @@ function App() {
   const services3 = [
     { title: "Student Form", description: "Student Form", image: Fa_mgmt_img },
     { title: "Semester Form", description: "Semester Form", image: "https://via.placeholder.com/100" },
-    { title: "Documents Upload", description: "Documents Upload", image: "https://via.placeholder.com/100" },
+    { title: "Semester Enrollment", description: "Semester Enrollment", image: "https://via.placeholder.com/100" },
     { title: "Notifications", description: "Send important updates to students.", image: "https://via.placeholder.com/100" }
   ];
   const services4 = [
@@ -35,6 +37,26 @@ function App() {
     { title: "Reset Credentials", description: "Student Reset", image: "https://via.placeholder.com/100" },
     { title: "Edit Details", description: "", image: "https://via.placeholder.com/100" },
     { title: "Notifications", description: "Send important updates to students.", image: "https://via.placeholder.com/100" }
+  ];
+  const services5 = [
+    { title: "Semester 1", description: "Form", image: Fa_mgmt_img },
+    { title: "Semester 2", description: "Form", image: Fa_mgmt_img },
+    { title: "Semester 3", description: "Form", image: Fa_mgmt_img },
+    { title: "Semester 4", description: "Form", image: Fa_mgmt_img },
+    { title: "Semester 5", description: "Form", image: Fa_mgmt_img },
+    { title: "Semester 6", description: "Form", image: Fa_mgmt_img },
+    { title: "Semester 7", description: "Form", image: Fa_mgmt_img },
+    { title: "Semester 8", description: "Form", image: Fa_mgmt_img }
+  ];
+  const services6 = [
+    { title: "Semester 1", description: "Enroll", image: Fa_mgmt_img },
+    { title: "Semester 2", description: "Enroll", image: Fa_mgmt_img },
+    { title: "Semester 3", description: "Enroll", image: Fa_mgmt_img },
+    { title: "Semester 4", description: "Enroll", image: Fa_mgmt_img },
+    { title: "Semester 5", description: "Enroll", image: Fa_mgmt_img },
+    { title: "Semester 6", description: "Enroll", image: Fa_mgmt_img },
+    { title: "Semester 7", description: "Enroll", image: Fa_mgmt_img },
+    { title: "Semester 8", description: "Enroll", image: Fa_mgmt_img }
   ];
   return(
   <Router>
@@ -47,11 +69,15 @@ function App() {
       <Route path='/admin-dashboard' element={<AdminDashboard services={services1}/>}/>
       <Route path='/faculty-dashboard/select-activity' element={<AdminDashboard services={services2}/>}/>
       <Route path='/student-dashboard/select-activity' element={<AdminDashboard services={services4}/>}/>
+      <Route path='/student-dashboard/semforms' element={<AdminDashboard services={services5}/>}/>
       <Route path='/student-form' element={<StudentForm/>}/>
       <Route path='/faculty-dashboard/select-activity/faculty-management' element={<FacultyManagement userType="faculty"/>}/>
       <Route path='/faculty-dashboard/select-activity/reset-credentials' element={<ResetCredentials userType="faculty"/>}/>
-      <Route path='/faculty-dashboard/select-activity/student-management' element={<FacultyManagement/>}/>
+      <Route path='/faculty-dashboard/select-activity/student-management' element={<FacultyManagement userType="student"/>}/>
       <Route path='/faculty-dashboard/select-activity/student-reset-credentials' element={<ResetCredentials userType="student"/>}/>
+      <Route path='/semester-form/:semesterNo' element={<SemesterForm/>}/>
+      <Route path='/semester-enroll' element={<AdminDashboard services={services6}/>}/>
+      <Route path='/semester-enroll/:semesterNo' element={<SemesterEnroll/>}/>
     </Routes>
   </Router>
   );

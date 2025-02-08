@@ -14,6 +14,7 @@ export default function FacultyManagement({ userType }) {
         title: userType === "faculty" ? "--Title--" : "",
         name: "",
         designation: userType === "faculty" ? "--Designation--" : "",
+        branch: userType === "faculty" ? "":"--Branch--",
         pwd: "",
         reset: 0,
     });
@@ -42,6 +43,7 @@ export default function FacultyManagement({ userType }) {
             title: userType === "faculty" ? "--Title--" : "",
             name: "",
             designation: userType === "faculty" ? "--Designation--" : "",
+            branch: userType === "faculty" ? "":"--Branch--",
             pwd: "",
             reset: 0,
         });
@@ -91,6 +93,7 @@ export default function FacultyManagement({ userType }) {
                 title: userType === "faculty" ? item["Title"] || "--Title--" : "",
                 name: item["Name"] || "",
                 designation: userType === "faculty" ? item["Designation"] || "--Designation--" : "",
+                branch: userType === "faculty" ? "--Branch--":""||item["Branch"],
                 pwd: nanoid(12),
                 reset: 0,
             }));
@@ -144,6 +147,15 @@ export default function FacultyManagement({ userType }) {
                                 <option>Head Of Dept.</option>
                             </select>
                         )}
+
+                        {userType !== "faculty" && (
+                            <select name="branch" className="field" value={user.branch} onChange={handleInputChange}>
+                                <option>--Branch--</option>
+                                <option>BTech</option>
+                                <option>MTech</option>
+                                <option>MCA</option>
+                            </select>
+                        )}
                     </div>
                     <div className="first-line button-group">
                         <button type="button" className="btn" onClick={handleAddUser}>
@@ -151,7 +163,7 @@ export default function FacultyManagement({ userType }) {
                         </button>
                     </div>
 
-                    <UserTable users={users} removeUser={removeUser} />
+                    <UserTable userType={userType} users={users} removeUser={removeUser} />
 
                     <button type="button" className="btn" onClick={() => generateXLS(users)}>
                         Generate & Download Credentials
@@ -179,12 +191,15 @@ export default function FacultyManagement({ userType }) {
     );
 }
 
-const UserTable = ({ users, removeUser }) => (
+const UserTable = ({ users, removeUser ,userType}) => (
     <table className="user-table">
         <thead>
             <tr>
                 <th>User ID</th>
                 <th>Name</th>
+                {userType !== "faculty" && (
+                    <th>Branch</th>
+                )}
                 <th>Action</th>
             </tr>
         </thead>
@@ -193,6 +208,9 @@ const UserTable = ({ users, removeUser }) => (
                 <tr key={index}>
                     <td>{user.userId}</td>
                     <td>{user.name}</td>
+                    {userType!== "faculty" && (
+                        <td>{user.branch}</td>
+                    )}
                     <td>
                         <button onClick={() => removeUser(index)}>Remove</button>
                     </td>

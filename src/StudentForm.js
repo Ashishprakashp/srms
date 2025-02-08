@@ -11,7 +11,10 @@ import AdminTitleBar from './AdminTitleBar';
 const StudentForm = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const nextPage = () => setCurrentPage(currentPage + 1);
+  const skipPageFwd = () => setCurrentPage(currentPage + 2);
+  const skipPageBwd = () => setCurrentPage(currentPage - 2);
   const prevPage = () => setCurrentPage(currentPage - 1);
+  const branch = sessionStorage.getItem("branch");
 
   const [formData, setFormData] = useState({
     personalInformation: {
@@ -118,23 +121,35 @@ const StudentForm = () => {
       
       <div className="form-content">
       {renderPage()}
-        <div className="form-navigation">
-          {currentPage > 1 && (
-            <button className="nav-button prev-button" onClick={prevPage}>
-              Back
-            </button>
-          )}
-          {currentPage < 5 && (
-            <button className="nav-button next-button" onClick={nextPage}>
-              Next
-            </button>
-          )}
-          {currentPage === 5 && (
-            <button className="nav-button submit-button" onClick={handleSubmit}>
-              Submit
-            </button>
-          )}
-        </div>
+      <div className="form-navigation">
+  {/* Back Button Logic */}
+  {(currentPage > 1) && (
+    <button
+      className="nav-button prev-button"
+      onClick={currentPage === 5 && branch === "Btech" ? skipPageBwd : prevPage}
+    >
+      Back
+    </button>
+  )}
+
+  {/* Next Button Logic */}
+  {(currentPage < 5) && (
+    <button
+      className="nav-button next-button"
+      onClick={currentPage === 3 && branch === "Btech" ? skipPageFwd : nextPage}
+    >
+      Next
+    </button>
+  )}
+
+  {/* Submit Button Logic */}
+  {(currentPage === 5) && (
+      <button className="nav-button submit-button" onClick={handleSubmit}>
+        Submit
+      </button>
+    )}
+  </div>
+
       </div>
     </div>
     </div>

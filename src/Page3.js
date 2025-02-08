@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Page1.css';
 
 const Page3 = ({ formData, setFormData }) => {
+  const branch = sessionStorage.getItem("branch");
   const handleInputChange = (e, field, section) => {
     let value = e.target.value;
 
@@ -34,6 +35,9 @@ const Page3 = ({ formData, setFormData }) => {
   return (
     <div className="page1-container">
       <h2>Page 3: School Education Details</h2>
+      {branch!=="Btech" &&(
+
+      
       <fieldset>
         <legend>UG</legend>
         <div className="form-group">
@@ -53,8 +57,8 @@ const Page3 = ({ formData, setFormData }) => {
               <input
                 type="radio"
                 name="UG"
-                value="BTech"
-                checked={formData.education.ug === "BTech"}
+                value="Btech"
+                checked={formData.education.ug === "Btech"}
                 onChange={(e) => handleRadioChange(e, "ug", "education")}
               />
               BTech
@@ -108,7 +112,7 @@ const Page3 = ({ formData, setFormData }) => {
           />
         </div>
       </fieldset>
-
+      )}
       <fieldset>
         <legend>Class XII</legend>
         <div className="form-group">
