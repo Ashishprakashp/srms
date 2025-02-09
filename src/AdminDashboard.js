@@ -38,6 +38,10 @@ export default function AdminDashboard({ services }) {
     }else if(serviceTitle.includes("Semester") && serviceDesc==="Enroll"){
       const semesterNumber = serviceTitle.split(" ")[1]; // Extract semester number
       navigate(`/semester-enroll/${semesterNumber}`);
+    }else if(serviceTitle === "Finalize grades"){
+      navigate("/admin-dashboard/select-activity/finalize-grades");
+    }else if(serviceDesc === "Finalize Grades"){
+      navigate(`/admin-dashboard/select-activity/finalize-grades/${serviceTitle}`);
     }
   };
 

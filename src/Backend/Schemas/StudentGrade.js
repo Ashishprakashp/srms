@@ -7,6 +7,7 @@ const StudentGradesSchema = new mongoose.Schema({
     {
       courseCode: { type: String, required: true },
       semester: { type: String, required: true },
+      confirmation: { type: Boolean, default: false },
       grade: { type: String, enum: ['O', 'A+', 'A', 'B+', 'B' ,'C' , 'RA/U'], default: null }, // Track the grade for the course
       isReEnrolled: { type: Boolean, default: false }, // Flag to check if a student is re-enrolled
     }

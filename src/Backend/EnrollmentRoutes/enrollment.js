@@ -1,6 +1,6 @@
 import express from "express";
 import Course from "/home/ashish-prakash/Documents/pull2/src/Backend/Schemas/Course.js";
-import StudentGrades from "/home/ashish-prakash/Documents/pull2/src/Backend/Schemas/StudentGrades.js";
+import StudentGrades from "../Schemas/StudentGrade.js";
 
 const router = express.Router();
 

@@ -12,6 +12,7 @@ import StudentLogin from './StudentLogin';
 import StudentDashboard from './StudentDashboard';
 import SemesterForm from './SemesterForm';
 import SemesterEnroll from './components/SemesterEnroll';
+import FinalizeGrade from './components/FinalizeGrade';
 
 function App() {
   const services1 = [
@@ -35,7 +36,7 @@ function App() {
   const services4 = [
     { title: "Create Credentials", description: "Student Create", image: Fa_mgmt_img },
     { title: "Reset Credentials", description: "Student Reset", image: "https://via.placeholder.com/100" },
-    { title: "Edit Details", description: "", image: "https://via.placeholder.com/100" },
+    { title: "Finalize grades", description: "Finalize grades", image: "https://via.placeholder.com/100" },
     { title: "Notifications", description: "Send important updates to students.", image: "https://via.placeholder.com/100" }
   ];
   const services5 = [
@@ -58,6 +59,13 @@ function App() {
     { title: "Semester 7", description: "Enroll", image: Fa_mgmt_img },
     { title: "Semester 8", description: "Enroll", image: Fa_mgmt_img }
   ];
+  const services7 = [
+    { title: "BTech", description: "Finalize Grades", image: Fa_mgmt_img },
+    { title: "MTech", description: "Finalize Grades", image: Fa_mgmt_img },
+    { title: "MCA (REG)", description: "Finalize Grades", image: Fa_mgmt_img },
+    { title: "MCA (SS)", description: "Finalize Grades", image: Fa_mgmt_img }
+    
+  ];
   return(
   <Router>
     <Routes>
@@ -78,6 +86,8 @@ function App() {
       <Route path='/semester-form/:semesterNo' element={<SemesterForm/>}/>
       <Route path='/semester-enroll' element={<AdminDashboard services={services6}/>}/>
       <Route path='/semester-enroll/:semesterNo' element={<SemesterEnroll/>}/>
+      <Route path='/admin-dashboard/select-activity/finalize-grades' element={<AdminDashboard services={services7}/>}/>
+      <Route path='/admin-dashboard/select-activity/finalize-grades/:class' element={<FinalizeGrade />}/>
     </Routes>
   </Router>
   );

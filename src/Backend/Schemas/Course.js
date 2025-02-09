@@ -11,6 +11,7 @@ const courseSchema = new mongoose.Schema({
   studentsEnrolled: [
     {
       studentId: { type: String, required: true },
+      confirmation: { type: Boolean, default: false },
       grade: { type: String, enum: ['O', 'A+', 'A', 'B+', 'B' ,'C' , 'RA/U'], default: null },
     }
   ]

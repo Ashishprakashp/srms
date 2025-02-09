@@ -4,7 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import axios from 'axios';
-import StudentGrades from './Schemas/StudentGrades.js';
+import StudentGrades from './Schemas/StudentGrade.js';
 import Student from './Schemas/StudentModel.js';
 import Semester from './Schemas/Semester.js'
 import enrollmentRoutes from "/home/ashish-prakash/Documents/pull2/src/Backend/EnrollmentRoutes/enrollment.js";
@@ -382,6 +382,28 @@ app.put("/student/resetPassword", async (req, res) => {
   console.log("7");
   res.status(200).json({ message: "Password reset successfully!" });
 });
+app.put('/updateStudentGrades/:studentId', (req, res) => {
+  const { studentId } = req.params;
+  const updatedStudent = req.body;
+
+  // Use the $set operator to update confirmation to true for all courses in enrolledCourses
+  StudentGrades.updateOne(
+    { studentId: studentId },
+    {
+      $set: {
+        "enrolledCourses.$[].confirmation": true // Set confirmation to true for all courses
+      }
+    }
+  )
+    .then((result) => {
+      res.status(200).json({ message: "Student grades confirmed successfully." });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Error updating student data." });
+    });
+});
+
+
 
 
 //get API routes
@@ -552,7 +574,37 @@ app.get("/semesters/fetch", async (req, res) => {
   }
 });
 
+app.get("/studentgrades", async (req, res) => {
+  try {
+    const branch = req.query.branch;
+    // Fetch student grades
+    const students = await StudentGrades.find({branch: branch});
 
+    // Filter students where all enrolled courses have confirmation: false
+    const filteredStudents = students.filter((student) =>
+      student.enrolledCourses.every((course) => course.confirmation === false)
+    );
+
+    // Fetch student names from studentaccs collection
+    const studentIds = filteredStudents.map((s) => s.studentId);
+    const studentAccs = await StudentAcc.find({ userId: { $in: studentIds } });
+
+    // Merge student names with grades
+    const response = filteredStudents.map((student) => {
+      const studentInfo = studentAccs.find((s) => s.userId === student.studentId);
+      return {
+        studentId: student.studentId,
+        name: studentInfo ? studentInfo.name : "Unknown", // If no match found
+        enrolledCourses: student.enrolledCourses,
+      };
+    });
+
+    res.json(response);
+  } catch (error) {
+    console.error("Error fetching student grades:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 
 

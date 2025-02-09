@@ -89,6 +89,8 @@ export default function SemesterForm() {
       }));
   
       const response = await axios.post("http://localhost:5000/semesters/submit", { dataToSubmit });
+      alert("Data submitted successfully:");
+      window.location.reload();
       console.log("Data submitted successfully:", response.data);
       // Handle successful submission (e.g., show a message, redirect, etc.)
     } catch (error) {
