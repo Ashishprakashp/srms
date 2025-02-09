@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import AdminTitleBar from "/home/ashish-prakash/Documents/pull2/src/AdminTitleBar.js";
-import "/home/ashish-prakash/Documents/pull2/src/AdminDashboard.css";
+import "/home/ashish-prakash/Documents/pull2/src/styles/AdminDashboard.css";
 import { useParams } from "react-router-dom";
 
 export default function FinalizeGrade() {

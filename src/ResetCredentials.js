@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AdminTitleBar from "./AdminTitleBar";
-import "./FacultyManagement.css";
+import "./styles/FacultyManagement.css";
 import axios from "axios";
 
 export default function ResetCredentials({ userType }) {  // Accept userType as a prop

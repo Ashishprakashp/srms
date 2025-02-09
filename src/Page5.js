@@ -1,5 +1,5 @@
 import React from 'react';
-import './Page1.css'
+import './styles/Page1.css'
 
 const Page2 = ({ formData, setFormData }) => {
   return (

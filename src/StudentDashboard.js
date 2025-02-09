@@ -2,7 +2,7 @@
 
 import Fa_mgmt_img from "./res/Faculty_mgmt_image.jpg";
 import { useState,useEffect } from "react";
-import "./AdminDashboard.css";
+import "./styles/AdminDashboard.css";
 import { useNavigate } from "react-router-dom"; 
 import AdminTitleBar from "./AdminTitleBar";
 import axios from "axios";

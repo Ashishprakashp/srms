@@ -1,4 +1,4 @@
-import './App.css';
+import './styles/App.css';
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom';
 import AdminLogin from './AdminLogin';
 import AdminDashboard from './AdminDashboard';
@@ -13,6 +13,8 @@ import StudentDashboard from './StudentDashboard';
 import SemesterForm from './SemesterForm';
 import SemesterEnroll from './components/SemesterEnroll';
 import FinalizeGrade from './components/FinalizeGrade';
+import DynamicQuery from './components/DynamicQuery';
+import Report from './Report';
 
 function App() {
   const services1 = [
@@ -37,7 +39,7 @@ function App() {
     { title: "Create Credentials", description: "Student Create", image: Fa_mgmt_img },
     { title: "Reset Credentials", description: "Student Reset", image: "https://via.placeholder.com/100" },
     { title: "Finalize grades", description: "Finalize grades", image: "https://via.placeholder.com/100" },
-    { title: "Notifications", description: "Send important updates to students.", image: "https://via.placeholder.com/100" }
+    { title: "Generate report", description: "Generate report", image: "https://via.placeholder.com/100" }
   ];
   const services5 = [
     { title: "Semester 1", description: "Form", image: Fa_mgmt_img },
@@ -70,6 +72,7 @@ function App() {
   <Router>
     <Routes>
       <Route path='/' element={<AdminLogin/>}/>
+      <Route path='/dynamic-query' element={<DynamicQuery/>}/>
       <Route path='/faculty-login' element={<FacultyLogin/>}/>
       <Route path='/student-login' element={<StudentLogin/>}/>
       <Route path='/student-dashboard' element={<StudentDashboard services={services3}/>}/>
@@ -88,6 +91,7 @@ function App() {
       <Route path='/semester-enroll/:semesterNo' element={<SemesterEnroll/>}/>
       <Route path='/admin-dashboard/select-activity/finalize-grades' element={<AdminDashboard services={services7}/>}/>
       <Route path='/admin-dashboard/select-activity/finalize-grades/:class' element={<FinalizeGrade />}/>
+      <Route path='/admin-dashboard/select-activity/generate-report' element={<Report/>}/>
     </Routes>
   </Router>
   );

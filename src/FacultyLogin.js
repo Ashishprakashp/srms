@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import placeholderImage from './res/placeholder2.jpg'; // Add a placeholder image
-import './AdminLogin.css'
+import './styles/AdminLogin.css'
 import AdminDashboard from './AdminDashboard';
 import AdminTitleBar from './AdminTitleBar';
 

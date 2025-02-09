@@ -1,5 +1,5 @@
 import React from 'react';
-import './Page1.css'; // Import the external CSS file
+import './styles/Page1.css'; // Import the external CSS file
 import Folder from "./res/folder.png";
 import PassportPhotoUpload from './PassportPhotoUpload';
 

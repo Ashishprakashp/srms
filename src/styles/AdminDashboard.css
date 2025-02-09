@@ -3,7 +3,7 @@ body, html {
   padding: 0;
   width: 100%;
   height: 100%;
-  background-image: url('./res/Admin_bg.jpeg') !important; /* !important is generally not recommended */
+  background-image: url('/home/ashish-prakash/Documents/pull2/src/res/Admin_bg.jpeg') !important; /* !important is generally not recommended */
   background-size: cover !important; /* Key property: Scales to cover the entire area */
   background-repeat: no-repeat; /* Prevents tiling */
   background-position: center; /* Optional: Centers the image */

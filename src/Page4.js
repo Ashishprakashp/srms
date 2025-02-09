@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Page1.css';
+import './styles/Page1.css';
 
 const Page4 = ({ formData, setFormData }) => {
   const [newExperience, setNewExperience] = useState({ employerName: '', role: '', expYears: '' });

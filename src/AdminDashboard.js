@@ -1,8 +1,6 @@
-
-
-  import Fa_mgmt_img from "./res/Faculty_mgmt_image.jpg";
+import Fa_mgmt_img from "./res/Faculty_mgmt_image.jpg";
 import { useState } from "react";
-import "./AdminDashboard.css";
+import "./styles/AdminDashboard.css";
 import { useNavigate } from "react-router-dom"; 
 import AdminTitleBar from "./AdminTitleBar";
 
@@ -42,6 +40,8 @@ export default function AdminDashboard({ services }) {
       navigate("/admin-dashboard/select-activity/finalize-grades");
     }else if(serviceDesc === "Finalize Grades"){
       navigate(`/admin-dashboard/select-activity/finalize-grades/${serviceTitle}`);
+    }else if(serviceTitle === "Generate report"){
+      navigate("/admin-dashboard/select-activity/generate-report");
     }
   };
 

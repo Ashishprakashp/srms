@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Page1.css';
+import './styles/Page1.css';
 
 const Page3 = ({ formData, setFormData }) => {
   const branch = sessionStorage.getItem("branch");

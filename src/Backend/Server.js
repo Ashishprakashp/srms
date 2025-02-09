@@ -606,6 +606,20 @@ app.get("/studentgrades", async (req, res) => {
   }
 });
 
+app.get("/students/dynamic", async(req, res) => {
+  try{
+    const stmt = JSON.parse(req.query.stmt);
+    console.log(stmt);
+    const students = await Student.find(stmt);
+    console.log("2");
+    console.log(students);
+    console.log("3");
+    res.json(students);
+  }catch(error){
+    res.status(500).send("Error fetching student details: " + error.message);
+  }
+
+})
 
 
 // Start Server

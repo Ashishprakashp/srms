@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AdminTitleBar from "./AdminTitleBar";
-import "./FacultyManagement.css";
+import "./styles/FacultyManagement.css";
 import Folder from "./res/folder.png";
 import axios from "axios";
 import { nanoid } from "nanoid";
