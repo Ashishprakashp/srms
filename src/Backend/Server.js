@@ -7,8 +7,14 @@ import axios from 'axios';
 import StudentGrades from './Schemas/StudentGrade.js';
 import Student from './Schemas/StudentModel.js';
 import Semester from './Schemas/Semester.js'
-import enrollmentRoutes from "/home/ashish-prakash/Documents/pull2/src/Backend/EnrollmentRoutes/enrollment.js";
+
 import Course from '/home/ashish-prakash/Documents/pull2/src/Backend/Schemas/Course.js';
+import {
+  sanitizeInput,
+  validateStringInput,
+  handleValidationErrors
+} from './validationUtils.js';
+
 
 dotenv.config();
 const app = express();
@@ -257,32 +263,36 @@ app.post("/semesters/enroll", async (req, res) => {
 app.post("/semesters/submit", async (req, res) => {
   try {
     const { dataToSubmit } = req.body;
-
+    console.log("1");
     if (!dataToSubmit || dataToSubmit.length === 0) {
       return res.status(400).json({ error: "No data to submit" });
     }
-
+    console.log("2");
     // Loop over each course and update the grade in both collections
     for (const { studentId, courseCode, grade } of dataToSubmit) {
       // Update Course collection
       const course = await Course.findOne({ courseCode });
+      console.log("3");
       if (!course) {
         return res.status(404).json({ error: `Course with code ${courseCode} not found` });
       }
-
+      console.log("4");
       // Find the student in the course and update the grade
       const studentIndex = course.studentsEnrolled.findIndex(
         (student) => student.studentId === studentId
       );
+      console.log("5");
       if (studentIndex === -1) {
         return res.status(404).json({ error: `Student with ID ${studentId} not found in course ${courseCode}` });
       }
-
+      console.log("6");
       course.studentsEnrolled[studentIndex].grade = grade;
+      console.log("7");
       await course.save();
-
+      console.log("8");
       // Update StudentGrades collection
       let studentGrades = await StudentGrades.findOne({ studentId });
+      console.log("9");
       if (!studentGrades) {
         return res.status(404).json({ error: `Student with ID ${studentId} not found in StudentGrades` });
       }
@@ -606,20 +616,43 @@ app.get("/studentgrades", async (req, res) => {
   }
 });
 
-app.get("/students/dynamic", async(req, res) => {
-  try{
-    const stmt = JSON.parse(req.query.stmt);
-    console.log(stmt);
+app.get("/students/dynamic", async (req, res) => {
+  try {
+    const stmt = req.query.stmt ? JSON.parse(req.query.stmt) : {};
+    console.log("Query Statement:", stmt);
+    
     const students = await Student.find(stmt);
-    console.log("2");
-    console.log(students);
-    console.log("3");
-    res.json(students);
-  }catch(error){
-    res.status(500).send("Error fetching student details: " + error.message);
+    res.json({
+      success: true,
+      count: students.length,
+      data: students // Wrap in data property
+    });
+  } catch (error) {
+    console.error("Server Error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Error fetching student details: " + error.message
+    });
   }
+});
 
-})
+app.get('/student-grades/:studentId', async (req, res) => {
+  try {
+      const { studentId } = req.params;
+
+      // Fetch student grades from the database
+      const studentData = await StudentGrades.findOne({ studentId });
+
+      if (!studentData) {
+          return res.status(404).json({ message: 'Student not found' });
+      }
+
+      res.json(studentData);
+  } catch (error) {
+      console.error('Error fetching student grades:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 
 // Start Server

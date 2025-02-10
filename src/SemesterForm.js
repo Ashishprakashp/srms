@@ -87,7 +87,7 @@ export default function SemesterForm() {
         courseCode: course.courseCode,
         grade: course.grade,
       }));
-  
+      console.log(dataToSubmit);
       const response = await axios.post("http://localhost:5000/semesters/submit", { dataToSubmit });
       alert("Data submitted successfully:");
       window.location.reload();

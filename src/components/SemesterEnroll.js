@@ -138,7 +138,7 @@ export default function SemesterEnroll() {
               {loading ? (
                 <span>Loading...</span> // Show loading message while checking enrollment status
               ) : enrolled ? (
-                <span className="enrolled-text">Already Enrolled</span> // Show message if already enrolled
+                <span className="enrolled-text">Already Enrolled!</span> // Show message if already enrolled
               ) : (
                 <button type="submit" className="submit-btn">Enroll</button> // Show Enroll button if not enrolled
               )}

@@ -15,6 +15,7 @@ import SemesterEnroll from './components/SemesterEnroll';
 import FinalizeGrade from './components/FinalizeGrade';
 import DynamicQuery from './components/DynamicQuery';
 import Report from './Report';
+import Test from './Test';
 
 function App() {
   const services1 = [
@@ -92,6 +93,7 @@ function App() {
       <Route path='/admin-dashboard/select-activity/finalize-grades' element={<AdminDashboard services={services7}/>}/>
       <Route path='/admin-dashboard/select-activity/finalize-grades/:class' element={<FinalizeGrade />}/>
       <Route path='/admin-dashboard/select-activity/generate-report' element={<Report/>}/>
+      <Route path='/test' element={<Test/>}/>
     </Routes>
   </Router>
   );

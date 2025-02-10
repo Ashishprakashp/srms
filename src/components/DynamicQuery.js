@@ -17,6 +17,17 @@ const availableAttributes = [
     ],
   },
   {
+    label: 'Mail',
+    path: 'personalInformation.mail',
+    type: 'string',
+    operators: [
+      { label: 'Starts With', value: 'startsWith' },
+      { label: 'Ends With', value: 'endsWith' },
+      { label: 'Contains', value: 'contains' },
+      { label: 'Equals', value: 'equals' },
+    ],
+  },
+  {
     label: 'Student ID',
     path: 'personalInformation.register',
     type: 'string',
@@ -60,12 +71,113 @@ const availableAttributes = [
     enumOptions: ['O', 'A+', 'A', 'B+', 'B','C','RA/U'],
     operators: [{ label: 'Is', value: 'eq' }],
   },
+  {
+    label: 'Sex',
+    path: 'personalInformation.sex',
+    type: 'enum',
+    enumOptions: ['M', 'F'],
+    operators: [{ label: 'Is', value: 'eq' }],
+  },
+  {
+    label: 'Spl category',
+    path: 'personalInformation.splcategory',
+    type: 'enum',
+    enumOptions: ['None', 'Ph','Sports','Ex-Service man','NRI','Other States','Any Other'],
+    operators: [{ label: 'Is', value: 'eq' }],
+  },
+  {
+    label: 'Volunteer in',
+    path: 'personalInformation.volunteer',
+    type: 'enum',
+    enumOptions: ['None', 'NSS','NSO','YRC'],
+    operators: [{ label: 'Is', value: 'eq' }],
+  },
+  {
+    label: 'Ug degree',
+    path: 'education.ug',
+    type: 'enum',
+    enumOptions: ['BE','BTech','Bsc','BCA'],
+    operators: [{ label: 'Is', value: 'eq' }],
+  },
+  {
+    label: 'Ug percentage',
+    path: 'education.ugPercentage',
+    type: 'number',
+    operators: [
+      { label: '>', value: 'gt' },
+      { label: '<', value: 'lt' },
+      { label: '=', value: 'eq' },
+    ],
+  },
+  {
+    label: 'XII board',
+    path: 'education.xiiBoard',
+    type: 'enum',
+    enumOptions: ['cbse','state-board','icse','others'],
+    operators: [{ label: 'Is', value: 'eq' }],
+  },
+  {
+    label: 'X board',
+    path: 'education.xBoard',
+    type: 'enum',
+    enumOptions: ['cbse','state-board','icse','others'],
+    operators: [{ label: 'Is', value: 'eq' }],
+  },
+  {
+    label: 'XII percentage',
+    path: 'education.xiiPercentage',
+    type: 'number',
+    operators: [
+      { label: '>', value: 'gt' },
+      { label: '<', value: 'lt' },
+      { label: '=', value: 'eq' },
+    ],
+  },
+  {
+    label: 'X percentage',
+    path: 'education.xPercentage',
+    type: 'number',
+    operators: [
+      { label: '>', value: 'gt' },
+      { label: '<', value: 'lt' },
+      { label: '=', value: 'eq' },
+    ],
+  },
+  {
+    label: 'Entrance exam',
+    path: 'entranceAndWorkExperience.entrance',
+    type: 'enum',
+    enumOptions: ['TANCET','GATE'],
+    operators: [{ label: 'Is', value: 'eq' }],
+  },
+  {
+    label: 'Entrance Score',
+    path: 'entranceAndWorkExperience.entranceScore',
+    type: 'number',
+    operators: [
+      { label: '>', value: 'gt' },
+      { label: '<', value: 'lt' },
+      { label: '=', value: 'eq' },
+    ],
+  },
+  {
+    label: 'Father income',
+    path: 'familyInformation.fatherInc',
+    type: 'number',
+    operators: [
+      { label: '>', value: 'gt' },
+      { label: '<', value: 'lt' },
+      { label: '=', value: 'eq' },
+    ],
+  },
   // Add more attributes as needed...
 ];
 
 function DynamicQuery() {
   const navigate = useNavigate();
   const [filters, setFilters] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
+  const [queriedAttributes, setQueriedAttributes] = useState([]);
 
   const addFilter = () => {
     const newFilter = {
@@ -75,10 +187,12 @@ function DynamicQuery() {
       value: '',
     };
     setFilters([...filters, newFilter]);
+    console.log('Filter added:', newFilter); // Debugging
   };
 
   const removeFilter = (id) => {
     setFilters(filters.filter(filter => filter.id !== id));
+    console.log('Filter removed:', id); // Debugging
   };
 
   const handleAttributeChange = (filterId, newPath) => {
@@ -95,6 +209,7 @@ function DynamicQuery() {
       return filter;
     });
     setFilters(updatedFilters);
+    console.log('Attribute changed:', updatedFilters); // Debugging
   };
 
   const handleOperatorChange = (filterId, newOperator) => {
@@ -103,6 +218,7 @@ function DynamicQuery() {
       operator: filter.id === filterId ? newOperator : filter.operator,
     }));
     setFilters(updatedFilters);
+    console.log('Operator changed:', updatedFilters); // Debugging
   };
 
   const handleValueChange = (filterId, newValue) => {
@@ -111,6 +227,7 @@ function DynamicQuery() {
       value: filter.id === filterId ? newValue : filter.value,
     }));
     setFilters(updatedFilters);
+    console.log('Value changed:', updatedFilters); // Debugging
   };
 
   const buildQuery = () => {
@@ -153,60 +270,27 @@ function DynamicQuery() {
     return queryConditions.length > 0 ? { $and: queryConditions } : {};
   };
 
-  const handleSearch = async() => {
+  const handleSearch = async () => {
     const query = buildQuery();
-    const response = await axios.get("http://localhost:5000/students/dynamic",{
-        params: {stmt: JSON.stringify(query)}
-    });
-    console.log(response);
-    console.log(query);
-    // Navigate to results page with query
-    // navigate('/search-results', { state: { query } });
+    console.log('Query built:', query); // Debugging
+    try {
+      const response = await axios.get("http://localhost:5000/students/dynamic", {
+        params: { stmt: JSON.stringify(query) }
+      });
+      console.log('Search results:', response.data); // Debugging
+      setSearchResults(response.data.data || []); // Ensure it's always an array
+      const attributesInQuery = filters.map(filter => filter.attributePath);
+      setQueriedAttributes([...new Set(attributesInQuery)]);
+    } catch (error) {
+      console.error("Search error:", error);
+      setSearchResults([]); // Set to empty array on error
+    }
   };
 
-  const renderValueInput = (filter, attribute) => {
-    const { type, enumOptions } = attribute;
-    const handleChange = (e) => handleValueChange(filter.id, e.target.value);
-
-    if (type === 'enum') {
-      return (
-        <select value={filter.value || ''} onChange={handleChange}>
-          <option value="">Select...</option>
-          {enumOptions.map(option => (
-            <option key={option} value={option}>{option}</option>
-          ))}
-        </select>
-      );
-    }
-
-    if (type === 'date') {
-      return (
-        <input
-          type="date"
-          value={filter.value || ''}
-          onChange={handleChange}
-        />
-      );
-    }
-
-    if (type === 'number') {
-      return (
-        <input
-          type="number"
-          value={filter.value || ''}
-          onChange={handleChange}
-        />
-      );
-    }
-
-    return (
-      <input
-        type="text"
-        value={filter.value || ''}
-        onChange={handleChange}
-        placeholder="Enter value..."
-      />
-    );
+  const getNestedValue = (student, path) => {
+    return path.split('.').reduce((obj, key) => {
+      return (obj && obj[key] !== undefined) ? obj[key] : null;
+    }, student) || '-'; // Return '-' if the value is null or undefined
   };
 
   return (
@@ -241,7 +325,26 @@ function DynamicQuery() {
                 ))}
               </select>
 
-              {attribute && renderValueInput(filter, attribute)}
+              {attribute && (
+  attribute.type === 'enum' ? (
+    <select
+      value={filter.value || ''}
+      onChange={(e) => handleValueChange(filter.id, e.target.value)}
+    >
+      <option value="">Select an option</option>
+      {attribute.enumOptions.map(option => (
+        <option key={option} value={option}>{option}</option>
+      ))}
+    </select>
+  ) : (
+    <input
+      type={attribute.type === 'number' ? 'number' : attribute.type === 'date' ? 'date' : 'text'}
+      value={filter.value || ''}
+      onChange={(e) => handleValueChange(filter.id, e.target.value)}
+      placeholder="Enter value..."
+    />
+  )
+)}
 
               <button
                 type="button"
@@ -262,6 +365,39 @@ function DynamicQuery() {
           >
             Search
           </button>
+        )}
+
+        {searchResults && searchResults.length > 0 && (
+          <div className="results-section">
+            <h3>Search Results ({searchResults.length} found)</h3>
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    {queriedAttributes.map(path => {
+                      const attr = availableAttributes.find(a => a.path === path);
+                      return <th key={path}>{attr?.label || path}</th>;
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {searchResults.map(student => (
+                    <tr key={student._id}>
+                      <td>{student.personalInformation?.register}</td>
+                      <td>{student.personalInformation?.name}</td>
+                      {queriedAttributes.map(path => (
+                        <td key={path}>
+                          {getNestedValue(student, path)?.toString() || '-'}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         )}
       </div>
     </div>

@@ -7,74 +7,130 @@ import AdminTitleBar from "./AdminTitleBar";
 export default function AdminDashboard({ services }) {
   const [studentId, setStudentId] = useState("");
   const [studentData, setStudentData] = useState(null);
+  const [gradesData, setGradesData] = useState(null);
   const [error, setError] = useState("");
 
   const handleFetchStudent = async (e) => {
     e.preventDefault();
     setError(""); // Clear previous errors
-
+  
     try {
-      const response = await axios.get(`http://localhost:5000/student?studentId=${studentId}`);
-      setStudentData(response.data);
-      console.log(response.data);
+      // Fetch student data
+      const studentResponse = await axios.get(`http://localhost:5000/student?studentId=${studentId}`);
+      
+      // Fetch student grades
+      const gradesResponse = await axios.get(`http://localhost:5000/student-grades/${studentId}`);
+      
+      // Set the data into separate state variables
+      setStudentData(studentResponse.data);
+      setGradesData(gradesResponse.data);
+  
+      console.log(studentResponse.data); // Log the student data
+      console.log(gradesResponse.data); // Log the grades data
+  
     } catch (err) {
       setError(err.response ? err.response.data.message : err.message);
       setStudentData(null);
+      setGradesData(null);
     }
   };
 
-  const generatePDF = () => {
+  function generatePDF() {
+    if (!studentData || !gradesData) {
+      console.log("No student or grades data found.");
+      return;
+    }
+
+    const { personalInformation , education} = studentData;
+    const { enrolledCourses } = gradesData;
+
+    // Check if enrolledCourses exist
+    if (!enrolledCourses || enrolledCourses.length === 0) {
+        console.log("No enrolled courses found.");
+        return;
+    }
+
+    // Initialize PDF document
     const doc = new jsPDF();
-    
-    // Title with Department Name
-    doc.setFontSize(18);
-    doc.text("Department of Information Science and Technology", 20, 20);
-    doc.text("Student Report", 80, 30);
 
-    // Draw border around the PDF
-    doc.setDrawColor(0, 0, 0); // Black color for border
-    doc.setLineWidth(0.5);
-    doc.rect(10, 10, 190, 277); // Adjust the rectangle to cover the entire page
-
-    // Personal Information
+    let x=10;
+    let y=20;
+    // Add personal information to the first page
     doc.setFontSize(12);
-    doc.text(`Name: ${studentData.personalInformation.name}`, 20, 40);
-    doc.text(`Register No: ${studentData.personalInformation.register}`, 20, 50);
-    doc.text(`DOB: ${new Date(studentData.personalInformation.dob).toDateString()}`, 20, 60);
-    doc.text(`Email: ${studentData.personalInformation.mail}`, 20, 70);
-    doc.text(`Contact: ${studentData.personalInformation.contact}`, 20, 80);
-    doc.text(`Blood Group: ${studentData.personalInformation.blood}`, 20, 90);
-    
-    // Family Information
-    doc.text("Family Information", 20, 110);
-    doc.text(`Father Name: ${studentData.familyInformation.fatherName}`, 20, 120);
-    doc.text(`Mother Name: ${studentData.familyInformation.motherName}`, 20, 130);
-    doc.text(`Parent Contact: ${studentData.familyInformation.parentContact}`, 20, 140);
-    doc.text(`Parent Email: ${studentData.familyInformation.parentMail}`, 20, 150);
-    
-    // Education Information
-    doc.text("Education Information", 20, 170);
-    doc.text(`UG: ${studentData.education.ug}`, 20, 180);
-    doc.text(`UG College: ${studentData.education.ugCollege}`, 20, 190);
-    doc.text(`UG Year: ${studentData.education.ugYear}`, 20, 200);
-    doc.text(`UG Percentage: ${studentData.education.ugPercentage}%`, 20, 210);
+    doc.text("Personal Information", x, y=y+10);
+    doc.text(`Name: ${personalInformation.name}`, x, y=y+10);
+    doc.text(`Register No: ${personalInformation.register}`, x, y=y+10);
+    doc.text(`Date of Birth: ${personalInformation.dob.split("T")[0]}`, x, y=y+10);
+    doc.text(`Sex: ${personalInformation.sex}`, x, y=y+10);
+    doc.text(`Blood Group: ${personalInformation.blood}`, x, y=y+10);
+    doc.text(`Community: ${personalInformation.community}`, x, y=y+10);
+    doc.text(`Cutoff: ${personalInformation.cutoff}`, x, y=y+10);
+    doc.text(`Scholarship: ${personalInformation.scholarship}`, x, y=y+10);
+    doc.text(`Volunteer: ${personalInformation.volunteer}`, x, y=y+10);
+    doc.text(`Contact: ${personalInformation.contact}`, x, y=y+10);
+    doc.text(`Email: ${personalInformation.mail}`, x, y=y+10);
 
-    // Entrance and Work Experience
-    doc.text("Entrance and Work Experience", 20, 230);
-    doc.text(`Entrance: ${studentData.entranceAndWorkExperience.entrance}`, 20, 240);
-    doc.text(`Entrance Register No: ${studentData.entranceAndWorkExperience.entranceRegister}`, 20, 250);
+
+    doc.text("Education Information", x, y=y+10);
+    doc.text(`Ug: ${education.ug}`, x, y=y+10);
+    doc.text(`Ug College: ${education.ugCollege}`, x, y=y+10);
     
-    studentData.entranceAndWorkExperience.workExperience.forEach((exp, index) => {
-      doc.text(`Work Experience ${index + 1}:`, 20, 260 + (index * 10));
-      doc.text(`Employer: ${exp.employerName}`, 20, 270 + (index * 10));
-      doc.text(`Role: ${exp.role}`, 20, 280 + (index * 10));
-      doc.text(`Years of Experience: ${exp.expYears}`, 20, 290 + (index * 10));
+    doc.text(`Ug percentage: ${education.ugPercentage}`, x, y=y+10);
+    doc.text(`XII School: ${education.xiiSchool}`, x, y=y+10);
+    doc.text(`XII Percentage: ${education.xiiPercentage}`, x, y=y+10);
+    doc.text(`X School: ${education.xSchool}`, x, y=y+10);
+    doc.text(`X Percentage: ${education.xPercentage}`, x, y=y+10);
+    
+    doc.addPage(); // Start a new page for grades
+
+    // Add grades information
+    doc.setFontSize(12);
+    doc.text("Grades Information", 10, 20);
+    
+    let yPosition = 40;
+    let currentSemester = null;
+
+    // Group courses by semester
+    const coursesBySemester = enrolledCourses.reduce((acc, course) => {
+        if (!acc[course.semester]) acc[course.semester] = [];
+        acc[course.semester].push(course);
+        return acc;
+    }, {});
+
+    // Add grades for each semester
+    Object.entries(coursesBySemester).forEach(([semester, courses]) => {
+        // Add semester header
+        if (yPosition > 280) { // Check page space
+            doc.addPage();
+            yPosition = 20;
+        }
+        
+        doc.setFontSize(14);
+        doc.text(`Semester ${semester}`, 10, yPosition);
+        yPosition += 15;
+
+        // Add course details
+        courses.forEach(course => {
+            if (yPosition > 280) { // Check page space
+                doc.addPage();
+                yPosition = 20;
+                doc.text(`Semester ${semester} (cont.)`, 10, yPosition);
+                yPosition += 15;
+            }
+
+            doc.setFontSize(12);
+            doc.text(`Course: ${course.courseCode}`, 10, yPosition);
+            doc.text(`Grade: ${course.grade}`, 100, yPosition);
+            yPosition += 10;
+        });
+
+        yPosition += 10; // Add spacing between semesters
     });
 
-    // Save PDF
-    doc.save("student_details.pdf");
-  };
-
+    // Save the PDF
+    doc.save(`${personalInformation.name}_grades.pdf`);
+}
+  
   return (
     <div className="container">
       <AdminTitleBar title={"IST Student Records Admin"} />
