@@ -294,11 +294,11 @@ function DynamicQuery() {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-container-dq">
       <AdminTitleBar title="IST Student Records Admin" />
       
-      <div className="form-section">
-        <h2>Dynamic Query</h2>
+      <div className="form-section-dq">
+        <h2>Dynamic Query Student Data</h2>
         <button type="button" onClick={addFilter} className="add-filter-btn">
           Add Filter
         </button>

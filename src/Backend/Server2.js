@@ -5,23 +5,23 @@ import sanitizeHtml from 'sanitize-html';
 import cors from 'cors';
 
 const app = express();
-app.use(express.json({ limit: '1mb' })); // Restrict JSON body size to 1MB
+app.use(express.json({ limit: '1mb' })); 
 app.use(cors());
 
-// JSON Schema for validation
+
 const ajv = new Ajv();
 const jsonSchema = {
   type: 'object',
   properties: {
     name: { type: 'string', minLength: 3 },
-    age: { type: 'integer', minimum: 18 }, // Ensures that age is an integer
+    age: { type: 'integer', minimum: 18 }, 
     email: { type: 'string', format: 'email' }
   },
   required: ['name', 'age', 'email'],
   additionalProperties: false
 };
 
-// Middleware to validate JSON schema
+
 const validateJsonSchema = (req, res, next) => {
   const validate = ajv.compile(jsonSchema);
   const valid = validate(req.body);
@@ -31,12 +31,12 @@ const validateJsonSchema = (req, res, next) => {
   next();
 };
 
-// Middleware to sanitize input
+
 const sanitizeInput = (req, res, next) => {
   if (req.body.name) {
     req.body.name = sanitizeHtml(req.body.name, {
-      allowedTags: [], // No HTML tags allowed
-      allowedAttributes: {} // No attributes allowed
+      allowedTags: 
+      allowedAttributes: 
     });
   }
   next();
@@ -60,7 +60,7 @@ app.post('/submit', [
     return res.status(400).json({ errors: errors.array() });
   }
 
-  // If input is valid, proceed
+
   res.status(200).json({ message: 'Form submitted successfully!', data: req.body });
 });
 

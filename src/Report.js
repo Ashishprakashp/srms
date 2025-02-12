@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { jsPDF } from "jspdf"; // Import jsPDF
 import axios from 'axios'; // Import axios
+import "./styles/Report.css";
 
 import AdminTitleBar from "./AdminTitleBar";
 
@@ -132,40 +133,43 @@ export default function AdminDashboard({ services }) {
 }
   
   return (
-    <div className="container">
-      <AdminTitleBar title={"IST Student Records Admin"} />
+    <div className="container-report">
+  <AdminTitleBar title={"IST Student Records Admin"} />
 
-      <div className="form-container">
-        <form onSubmit={handleFetchStudent}>
-          <label>Enter Student ID:</label>
-          <input
-            type="text"
-            value={studentId}
-            onChange={(e) => setStudentId(e.target.value)}
-            placeholder="Enter Student ID"
-            required
-          />
-          <button type="submit">Fetch Details</button>
-        </form>
+  <div className="form-container-report">
+    <form onSubmit={handleFetchStudent}>
+      <label className="report-head">Generate Student Report</label>
+      <div className="report-field-container">
+        <input
+          type="text"
+          value={studentId}
+          className="report-field"
+          onChange={(e) => setStudentId(e.target.value)}
+          placeholder="Enter Student ID"
+          required
+        />
+        <button type="submit">Fetch Details</button>
       </div>
+    </form>
+  </div>
 
-      {/* Display Student Data */}
-      {error && <p className="error">{error}</p>}
+  {/* Display Student Data */}
+  {error && <p className="error">{error}</p>}
 
-      {studentData && (
-        <div className="student-details">
-          <h3>Student Details</h3>
-          <p><strong>Name:</strong> {studentData.personalInformation.name}</p>
-          <p><strong>Register No:</strong> {studentData.personalInformation.register}</p>
-          <p><strong>DOB:</strong> {new Date(studentData.personalInformation.dob).toDateString()}</p>
-          <p><strong>Email:</strong> {studentData.personalInformation.mail}</p>
-          <p><strong>Contact:</strong> {studentData.personalInformation.contact}</p>
-          <p><strong>Blood Group:</strong> {studentData.personalInformation.blood}</p>
+  {studentData && (
+    <div className="student-details">
+      <h3>Student Details</h3>
+      <p><strong>Name:</strong> {studentData.personalInformation.name}</p>
+      <p><strong>Register No:</strong> {studentData.personalInformation.register}</p>
+      <p><strong>DOB:</strong> {new Date(studentData.personalInformation.dob).toDateString()}</p>
+      <p><strong>Email:</strong> {studentData.personalInformation.mail}</p>
+      <p><strong>Contact:</strong> {studentData.personalInformation.contact}</p>
+      <p><strong>Blood Group:</strong> {studentData.personalInformation.blood}</p>
 
-          {/* Add the download PDF button */}
-          <button onClick={generatePDF}>Download PDF</button>
-        </div>
-      )}
+      {/* Add the download PDF button */}
+      <button onClick={generatePDF} className="report-dwd">Download PDF</button>
     </div>
+  )}
+</div>
   );
 }

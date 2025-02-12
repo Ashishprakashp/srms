@@ -94,7 +94,7 @@ export default function ResetCredentials({ userType }) {  // Accept userType as 
                     </div>
                     {errorMessage && <div className="error-message">{errorMessage}</div>}
                 </form>
-
+                <div className="user-table">
                 {userData.length > 0 && (
                     <table>
                         <thead>
@@ -115,6 +115,7 @@ export default function ResetCredentials({ userType }) {  // Accept userType as 
                         </tbody>
                     </table>
                 )}
+                </div>
 
                 {showResetForm && (
                     <div className="first-line button-group">
